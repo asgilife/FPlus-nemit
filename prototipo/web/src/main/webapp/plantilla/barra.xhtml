@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:f="jakarta.faces.core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div class="layout-topbar">
+        <div class="layout-topbar-left">
+            <button type="button" class="topbar-menu-btn" onclick="alternarMenu()" aria-label="Menú">
+                <i class="pi pi-bars"/>
+            </button>
+            <span class="topbar-brand">
+                <img src="#{resource['app:images/nemit-logo-blanco.svg']}" alt="Nemit" class="brand-logo brand-logo--white"/>
+                <img src="#{resource['app:images/nemit-logo-color.svg']}" alt="Nemit" class="brand-logo brand-logo--color"/>
+                <span class="brand-text">FPlus</span>
+            </span>
+            <!-- Marca de prototipo: el cliente nunca debe confundir esto con el sistema en operación -->
+            <span class="proto-marca" title="Prototipo con datos simulados">Prototipo</span>
+        </div>
+
+        <div class="layout-topbar-right">
+            <h:form id="barraForm" styleClass="topbar-actions">
+                <!-- Tema: ajax=false para recargar el tema de PrimeFaces del <h:head> -->
+                <span class="ime-theme" title="Cambiar tema">
+                    <i class="pi pi-palette"/>
+                    <!-- Las variantes las declara el tema del proyecto (tema.properties). Id fijo dentro de la
+                         repetición: en una plantilla compartida, un id automático puede no ser el mismo en cada página -->
+                    <ui:repeat value="#{temaBean.variantes}" var="v" id="variantes">
+                        <p:commandLink id="variante" value="#{v.etiqueta}" ajax="false" action="#{temaBean.cambiar(v.clave)}"
+                                       styleClass="ime-theme-opt #{temaBean.esActivo(v.clave) ? 'active' : ''}"/>
+                    </ui:repeat>
+                </span>
+
+                <span class="topbar-sep">|</span>
+
+                <!-- Cada demostración empieza con los mismos datos -->
+                <p:commandLink id="reiniciar" action="#{sesionDemo.reiniciarDatos}" ajax="false"
+                               styleClass="proto-reiniciar" title="Volver los datos de ejemplo a su estado inicial">
+                    <i class="pi pi-refresh"/><span class="proto-solo-ancho"> Reiniciar datos</span>
+                </p:commandLink>
+
+                <span class="topbar-sep">|</span>
+
+                <!-- Rol simulado: enseña qué ve cada actor sin login real -->
+                <span class="proto-rol" title="Ver el prototipo como…">
+                    <i class="pi pi-user"/>
+                    <p:selectOneMenu id="rol" value="#{sesionDemo.rol}" styleClass="proto-rol__menu" autoWidth="false" title="#{sesionDemo.rol}">
+                        <f:selectItems value="#{sesionDemo.roles}"/>
+                        <!-- Recarga completa: con update="@all" no se vuelve a evaluar lo que cada rol ve -->
+                        <p:ajax process="@this" oncomplete="window.location.reload()"/>
+                    </p:selectOneMenu>
+                </span>
+            </h:form>
+        </div>
+    </div>
+
+</ui:composition>

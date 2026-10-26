@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<!--
+  Plantilla del prototipo: la misma estructura de página que tendrá el sistema (barra, menú lateral, contenido, pie).
+  Cada vista la usa con ui:composition template="/plantilla/plantilla.xhtml" y define "title" y "content".
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:f="jakarta.faces.core"
+      xmlns:ui="jakarta.faces.facelets"
+      xmlns:p="http://primefaces.org/ui"
+      lang="es"
+      data-ime-theme="#{temaBean.tema}"
+      data-ime-modo="#{temaBean.modo}">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        </f:facet>
+        <title><ui:insert name="title">FPlus</ui:insert> · Prototipo</title>
+        <link rel="icon" type="image/svg+xml" href="#{resource['app:images/favicon.svg']}"/>
+        <h:outputStylesheet name="css/primeflex.min.css" library="app"/>
+        <h:outputStylesheet name="tokens.css"            library="nemit-tema"/>
+        <h:outputStylesheet name="theme.css"             library="nemit-tema"/>
+        <h:outputStylesheet name="layout.css"            library="nemit-tema"/>
+        <h:outputStylesheet name="kit.css"               library="nemit-tema"/>
+        <ui:insert name="head"/>
+        <!-- Los retoques del tema, de verdad al final: PrimeFaces carga su components.css después de las hojas de
+             arriba y, a igual especificidad, ganaría. La faceta «last» se pinta después de todo -->
+        <f:facet name="last">
+            <link rel="stylesheet" href="#{resource['nemit-tema:ajustes.css']}"/>
+        </f:facet>
+    </h:head>
+
+    <h:body>
+        <div class="layout-wrapper">
+
+            <ui:include src="/plantilla/menu.xhtml"/>
+
+            <div class="layout-content-wrapper">
+                <ui:include src="/plantilla/barra.xhtml"/>
+
+                <div class="layout-content">
+                    <ui:fragment rendered="#{param.reiniciado eq 'true'}">
+                        <div class="proto-aviso-reinicio" role="status">
+                            <i class="pi pi-refresh"/> Datos de ejemplo reiniciados.
+                        </div>
+                    </ui:fragment>
+                    <ui:insert name="content"/>
+                </div>
+
+                <ui:include src="/plantilla/pie.xhtml"/>
+            </div>
+
+            <div class="layout-sidebar-overlay"
+                 onclick="document.querySelector('.layout-sidebar').classList.remove('layout-sidebar-active');this.classList.remove('active');"/>
+
+            <p:ajaxStatus style="position:fixed;bottom:1rem;right:1rem;z-index:9999">
+                <f:facet name="start">
+                    <i class="pi pi-spin pi-spinner" style="font-size:1.5rem;color:var(--primary-color)" aria-hidden="true"/>
+                </f:facet>
+                <f:facet name="complete">
+                    <h:outputText value=""/>
+                </f:facet>
+            </p:ajaxStatus>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    if (window.innerWidth &gt;= 992 &amp;&amp; localStorage.getItem('menuColapsado') === '1') {
+                        document.querySelector('.layout-wrapper').classList.add('layout-sidebar-collapsed');
+                    }
+                    /* Marca la entrada del menú de la página actual (aria-current); cada tema decide si la pinta */
+                    var ruta = window.location.pathname.replace(/;jsessionid=[^/?]*/, '');
+                    document.querySelectorAll('.layout-menu a[href]').forEach(function (a) {
+                        var destino = a.getAttribute('href').split('?')[0].replace(/;jsessionid=[^/?]*/, '');
+                        if (destino === ruta) { a.setAttribute('aria-current', 'page'); }
+                    });
+                });
+
+                if (typeof $ !== 'undefined') {
+                    /* Una vista vencida (el servidor se reinició o la sesión expiró) recarga la página */
+                    $(document).on('pfAjaxError', function (event, xhr) {
+                        if (xhr &amp;&amp; xhr.responseText &amp;&amp; xhr.responseText.indexOf('ViewExpiredException') !== -1) {
+                            window.location.reload();
+                        }
+                    });
+                }
+
+                /* Menú: en pantallas angostas se desliza encima; en escritorio se colapsa y se recuerda */
+                function alternarMenu() {
+                    if (window.innerWidth &lt;= 991) {
+                        document.querySelector('.layout-sidebar').classList.toggle('layout-sidebar-active');
+                        document.querySelector('.layout-sidebar-overlay').classList.toggle('active');
+                    } else {
+                        var colapsado = document.querySelector('.layout-wrapper').classList.toggle('layout-sidebar-collapsed');
+                        try { localStorage.setItem('menuColapsado', colapsado ? '1' : '0'); } catch (e) {}
+                    }
+                }
+            </script>
+        </div>
+    </h:body>
+</html>

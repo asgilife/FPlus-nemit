@@ -1,0 +1,269 @@
+<!--
+  Revisión de Fresnillo de los ensayes de ERSA.
+  Historias: HU-006 (revisar ERSA contra la mina) y la parte de Fresnillo de HU-007 (regresar un lote y recibir la
+  confirmación o la corrección).
+  Requisitos: RF-003, RF-051 a RF-056; RNF-001, RNF-006.
+  Supuestos (2026-10-21):
+   - El límite que marca en rojo ERSA contra mina es el límite de partición del extracto (el del contrato con Met-Mex) (P-025).
+   - «Autorizar» deja los ensayes de ERSA listos para el intercambio (P-025).
+   - Antes de que ERSA autorice, Fresnillo ve el lote, su estado y sus fechas, pero no sus valores (C-007).
+   - La observación al regresar es obligatoria (P-056) y no señala elementos (P-055).
+   - El nombre del rol de Fresnillo es provisional (P-050).
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="title">Revisión de ensayes</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header proto-encabezado">
+            <div>
+                <h1>Revisión de ensayes</h1>
+                <p class="proto-suave">Lo que ERSA reporta, contra el ponderado de la mina, antes del intercambio.</p>
+            </div>
+        </div>
+
+        <h:form id="form">
+            <p:growl id="mensajes" showDetail="false" life="4000" severity="info"/>
+
+            <ui:fragment rendered="#{not sesionDemo.esDe('Fresnillo')}">
+                <p:staticMessage severity="warn" summary="Sin acceso"
+                                 detail="Esta tarea es de Fresnillo. Con el rol «#{sesionDemo.rol}» no se ven los análisis ni el ponderado de la mina."/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{sesionDemo.esDe('Fresnillo')}">
+                <div class="grid">
+                    <div class="col-12 md:col-4">
+                        <div class="ime-card proto-kpi">
+                            <h:outputText id="kpiPorRevisar" styleClass="proto-kpi__valor" value="#{revisionEnsayesView.porRevisar}"/>
+                            <span class="proto-kpi__etiqueta">Por revisar</span>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <div class="ime-card proto-kpi">
+                            <h:outputText id="kpiDiferencias" styleClass="proto-kpi__valor" value="#{revisionEnsayesView.conDiferencias}"/>
+                            <span class="proto-kpi__etiqueta">Con diferencias sobre el límite</span>
+                        </div>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <div class="ime-card proto-kpi">
+                            <h:outputText id="kpiEnErsa" styleClass="proto-kpi__valor" value="#{revisionEnsayesView.enErsa}"/>
+                            <span class="proto-kpi__etiqueta">En ERSA (por reportar o regresados)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ime-card">
+                    <div class="proto-filtros">
+                        <p:selectOneMenu id="compania" value="#{revisionEnsayesView.filtro.compania}" filter="true"
+                                         filterMatchMode="contains" aria-label="Compañía">
+                            <f:selectItem itemLabel="Todas las compañías" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{revisionEnsayesView.companias}"/>
+                            <p:ajax listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="unidad" value="#{revisionEnsayesView.filtro.unidad}" filter="true"
+                                         filterMatchMode="contains" aria-label="Unidad">
+                            <f:selectItem itemLabel="Todas las unidades" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{revisionEnsayesView.unidades}"/>
+                            <p:ajax listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="producto" value="#{revisionEnsayesView.filtro.producto}" aria-label="Producto">
+                            <f:selectItem itemLabel="Todos los productos" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{revisionEnsayesView.productos}"/>
+                            <p:ajax listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="tipoBusqueda" value="#{revisionEnsayesView.filtro.tipoBusqueda}" aria-label="Buscar por">
+                            <f:selectItems value="#{revisionEnsayesView.tiposBusqueda}" var="t" itemLabel="#{t.texto}" itemValue="#{t}"/>
+                            <p:ajax listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:selectOneMenu>
+                        <p:datePicker id="desde" value="#{revisionEnsayesView.filtro.desde}" pattern="dd/MM/yyyy"
+                                      placeholder="Desde" showIcon="true" aria-label="Desde">
+                            <p:ajax event="dateSelect" listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:datePicker>
+                        <p:datePicker id="hasta" value="#{revisionEnsayesView.filtro.hasta}" pattern="dd/MM/yyyy"
+                                      placeholder="Hasta" showIcon="true" aria-label="Hasta">
+                            <p:ajax event="dateSelect" listener="#{revisionEnsayesView.filtrar}" update="@form"/>
+                        </p:datePicker>
+                        <p:commandButton id="limpiar" value="Limpiar" icon="pi pi-filter-slash" styleClass="ui-button-outlined"
+                                         actionListener="#{revisionEnsayesView.limpiarFiltros}" process="@this" update="@form"/>
+                    </div>
+                </div>
+
+                <div class="ime-card">
+                    <div class="proto-encabezado">
+                        <p class="proto-suave">Selecciona los lotes que ERSA ya autorizó para regresarlos o autorizarlos.</p>
+                        <div class="proto-acciones">
+                            <p:commandButton id="regresarBtn" value="Regresar a ERSA" icon="pi pi-replay" styleClass="ui-button-outlined"
+                                             actionListener="#{revisionEnsayesView.prepararRegreso}"
+                                             process="@this tabla" update=":dlgRegresarForm avisos"
+                                             oncomplete="if (!args.validationFailed) PF('dlgRegresar').show()"/>
+                            <p:commandButton id="autorizarBtn" value="Autorizar" icon="pi pi-verified"
+                                             actionListener="#{revisionEnsayesView.autorizar}"
+                                             process="@this tabla" update="@form">
+                                <p:confirm header="¿Autorizar los ensayes de ERSA?" icon="pi pi-exclamation-triangle"
+                                           message="Los lotes seleccionados quedan listos para el intercambio con Met-Mex."/>
+                            </p:commandButton>
+                        </div>
+                    </div>
+                    <p:messages id="avisos" closable="true" severity="error"/>
+                    <div class="proto-pregunta">¿Qué pasa al autorizar: los ensayes quedan listos para el intercambio? ¿Qué límite se usa para ERSA contra la mina? (P-025)</div>
+
+                    <p:dataTable id="tabla" value="#{revisionEnsayesView.lotes}" var="l" rowKey="#{l.clave}"
+                                 selectionMode="multiple" selection="#{revisionEnsayesView.seleccionados}" selectionRowMode="none"
+                                 selectionDisabled="#{not l.autorizadoPorErsa or l.devuelto or l.revision eq 'AUTORIZADO'}"
+                                 rowStyleClass="#{revisionEnsayesView.fuera(l) > 0 and l.revision eq 'POR_REVISAR' ? 'proto-fila-atencion' : null}"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 emptyMessage="No hay lotes para estos filtros." styleClass="ime-table-dense proto-tabla-ancha" reflow="true">
+                        <p:column selectionBox="true" ariaHeaderText="Seleccionar"/>
+                        <p:column headerText="Lote" sortBy="#{l.loteMetMex}">
+                            <div class="proto-fuerte">#{l.loteMetMex}</div>
+                            <div class="proto-nota">lote #{l.loteUnidad}</div>
+                        </p:column>
+                        <p:column headerText="Unidad y producto" sortBy="#{l.unidad}">
+                            <div>#{l.unidad}</div>
+                            <div class="proto-nota">#{l.producto}</div>
+                        </p:column>
+                        <p:column headerText="Cierre" sortBy="#{l.fechaCierre}">
+                            <h:outputText value="#{l.fechaCierre}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/></h:outputText>
+                        </p:column>
+                        <p:column headerText="Resultados">
+                            <ui:fragment rendered="#{l.fechaEntregaResultados != null}">
+                                <div>#{revisionEnsayesView.fechaHora(l.fechaEntregaResultados)}</div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{l.fechaEntregaResultados == null}">
+                                <div class="proto-nota">#{l.fechaEstimada == null ? 'Sin fecha estimada' : 'Estimada '.concat(revisionEnsayesView.fecha(l.fechaEstimada))}</div>
+                            </ui:fragment>
+                        </p:column>
+                        <p:column headerText="Sobre el límite" styleClass="proto-num">
+                            <p:tag value="#{revisionEnsayesView.fuera(l)}" severity="danger" rendered="#{revisionEnsayesView.fuera(l) > 0}"/>
+                            <h:outputText value="—" rendered="#{revisionEnsayesView.fuera(l) == 0}"/>
+                        </p:column>
+                        <p:column headerText="Estado">
+                            <div class="proto-etiquetas">
+                                <p:tag value="#{l.estado.texto} en ERSA" severity="#{l.estado.severidad}"/>
+                                <p:tag value="#{l.revision.texto}" severity="#{l.revision.severidad}" rendered="#{l.revision != null}"/>
+                            </div>
+                        </p:column>
+                        <p:column headerText="Detalle">
+                            <p:commandButton id="ver" icon="pi pi-search" title="Ver" ariaLabel="Ver"
+                                             styleClass="ui-button-outlined ui-button-sm"
+                                             actionListener="#{revisionEnsayesView.verDetalle(l)}" process="@this"
+                                             update=":dlgDetalleForm" oncomplete="PF('dlgDetalle').show()"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </ui:fragment>
+        </h:form>
+
+        <!-- Detalle del lote: el análisis ERSA contra mina y su historia -->
+        <p:dialog id="dlgDetalle" widgetVar="dlgDetalle" header="Análisis del lote" modal="true" responsive="true"
+                  width="820" closeOnEscape="true" fitViewport="true">
+            <h:form id="dlgDetalleForm">
+                <ui:fragment rendered="#{revisionEnsayesView.detalle != null}">
+                    <ui:param name="d" value="#{revisionEnsayesView.detalle}"/>
+                    <div class="proto-encabezado">
+                        <h2>#{d.loteMetMex} · #{d.unidad} · lote #{d.loteUnidad}</h2>
+                        <p:tag value="#{d.revision.texto}" severity="#{d.revision.severidad}" rendered="#{d.revision != null}"/>
+                    </div>
+                    <div class="proto-campos">
+                        <span>Producto</span><span>#{d.producto}</span>
+                        <span>Tipo de muestra</span><span>#{d.tipoMuestra.texto}</span>
+                        <span>Capturó</span><span>#{empty d.capturaron ? '—' : d.capturaron}</span>
+                        <span>Revisó</span><span>#{empty d.reviso ? '—' : d.reviso}</span>
+                        <span>Autorizó</span><span>#{empty d.autorizo ? '—' : d.autorizo}</span>
+                        <span>Entrega de Met-Mex a ERSA</span>
+                        <span>#{revisionEnsayesView.fecha(d.fechaEntregaMetMex)}</span>
+                        <span>Recepción en ERSA</span>
+                        <span>#{revisionEnsayesView.fecha(d.fechaRecepcion)}</span>
+                        <span>Entrega estimada</span>
+                        <span>#{revisionEnsayesView.fecha(d.fechaEstimada)}</span>
+                        <span>Entrega de resultados</span>
+                        <span>#{revisionEnsayesView.fechaHora(d.fechaEntregaResultados)}</span>
+                        <span>Peso seco (t)</span>
+                        <span>#{revisionEnsayesView.numero(d.pesoSeco, 3)}</span>
+                    </div>
+
+                    <p:staticMessage severity="info" rendered="#{not d.autorizadoPorErsa}" summary="Todavía en ERSA"
+                                     detail="Los valores se ven cuando ERSA autoriza el lote."/>
+                    <p:staticMessage severity="warn" rendered="#{not empty d.observacionFresnillo}"
+                                     summary="Observación de Fresnillo" detail="#{d.observacionFresnillo}"/>
+
+                    <p:dataTable id="analisis" value="#{revisionEnsayesView.filas}" var="f" rendered="#{d.autorizadoPorErsa}"
+                                 styleClass="ime-table-dense proto-tabla-ancha" reflow="true">
+                        <p:column headerText="Elemento">#{f.elemento.etiqueta} (#{f.elemento.unidad})</p:column>
+                        <p:column headerText="Condición">
+                            <p:tag value="#{f.elemento.condicion.texto}" severity="#{f.elemento.condicion eq 'PAGABLE' ? 'success' : 'warning'}"/>
+                        </p:column>
+                        <p:column headerText="ERSA" styleClass="proto-num">
+                            <h:outputText value="#{revisionEnsayesView.numero(f.ersa, f.elemento.decimales)}"/>
+                        </p:column>
+                        <p:column headerText="Mina (ponderado)" styleClass="proto-num">
+                            <h:outputText value="#{revisionEnsayesView.numero(f.mina, f.elemento.decimales)}"/>
+                        </p:column>
+                        <p:column headerText="Diferencia" styleClass="proto-num">
+                            <ui:fragment rendered="#{f.fueraDeLimite}">
+                                <i class="pi pi-exclamation-circle proto-valor-alerta" aria-label="Sobre el límite" title="Sobre el límite"/>
+                            </ui:fragment>
+                            <h:outputText value="#{revisionEnsayesView.numero(f.diferencia, f.elemento.decimales)}" styleClass="#{f.fueraDeLimite ? 'proto-valor-alerta' : null}"/>
+                        </p:column>
+                        <p:column headerText="Límite" styleClass="proto-num">
+                            <h:outputText value="#{f.elemento.limiteParticion}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                    <p:fieldset legend="Historia del lote" toggleable="true" collapsed="true">
+                        <ui:repeat value="#{d.historia}" var="h">
+                            <div class="proto-hito">
+                                <h:outputText styleClass="proto-hito__hora proto-nota" value="#{h.cuando}">
+                                    <f:convertDateTime type="localDateTime" pattern="dd/MM HH:mm"/>
+                                </h:outputText>
+                                <span>#{h.que}</span>
+                                <span class="proto-nota">#{h.quien}</span>
+                            </div>
+                        </ui:repeat>
+                    </p:fieldset>
+
+                    <div class="proto-acciones">
+                        <p:commandButton value="Cerrar" type="button" styleClass="ui-button-outlined" onclick="PF('dlgDetalle').hide()"/>
+                    </div>
+                </ui:fragment>
+            </h:form>
+        </p:dialog>
+
+        <!-- Regresar a ERSA: la observación va en el correo -->
+        <p:dialog id="dlgRegresar" widgetVar="dlgRegresar" header="Regresar a ERSA" modal="true" responsive="true" width="560">
+            <h:form id="dlgRegresarForm">
+                <p:messages id="erroresRegreso" closable="false" severity="error,warn"/>
+                <p>Lotes: <strong>#{revisionEnsayesView.seleccionCount == 0 ? 'ninguno seleccionado' : ''}<ui:repeat value="#{revisionEnsayesView.seleccionados}" var="s" varStatus="st">#{s.loteMetMex}#{st.last ? '' : ', '}</ui:repeat></strong></p>
+                <div class="proto-campo">
+                    <p:outputLabel for="observacion" value="¿Qué tiene que revisar ERSA?"/>
+                    <p:inputTextarea id="observacion" value="#{revisionEnsayesView.observacion}" rows="5" autoResize="false"
+                                     maxlength="1000" counter="contador" counterTemplate="Quedan {0} de 1000 caracteres."/>
+                    <h:outputText id="contador" styleClass="proto-nota"/>
+                </div>
+                <div class="proto-pila">
+                    <div class="proto-pregunta">¿La observación es obligatoria? ¿Hay que señalar qué elemento revisar? (P-056, P-055)</div>
+                </div>
+                <div class="proto-acciones">
+                    <p:commandButton id="enviarRegreso" value="Enviar" icon="pi pi-send"
+                                     actionListener="#{revisionEnsayesView.regresar}"
+                                     process="@form" update="@form :form :form:mensajes :correosForm"/>
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-button-outlined" onclick="PF('dlgRegresar').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="confirmacionForm">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="440">
+                <p:commandButton value="Volver" type="button" styleClass="ui-confirmdialog-no ui-button-outlined"/>
+                <p:commandButton value="Sí, autorizar" type="button" styleClass="ui-confirmdialog-yes"/>
+            </p:confirmDialog>
+        </h:form>
+
+        <ui:include src="/plantilla/correos-demo.xhtml"/>
+    </ui:define>
+</ui:composition>

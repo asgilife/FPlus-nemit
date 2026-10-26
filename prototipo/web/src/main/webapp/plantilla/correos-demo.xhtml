@@ -1,0 +1,29 @@
+<!--
+  Solo para demostrar: los correos que el sistema enviaría (BuzonDemo). No es parte del producto.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form id="correosForm">
+        <p:fieldset id="correos" legend="Demostración · correos que el sistema enviaría (#{buzonDemo.correos.size()})"
+                    toggleable="true" collapsed="#{empty buzonDemo.correos}" styleClass="proto-demo">
+            <ui:fragment rendered="#{empty buzonDemo.correos}">
+                <p class="proto-nota">Todavía no se ha enviado ningún aviso en esta demostración.</p>
+            </ui:fragment>
+            <ui:repeat value="#{buzonDemo.correos}" var="c">
+                <div class="proto-pila">
+                    <div class="proto-fila">
+                        <h:outputText styleClass="proto-nota" value="#{c.cuando}">
+                            <f:convertDateTime type="localDateTime" pattern="dd/MM HH:mm"/>
+                        </h:outputText>
+                        <span class="proto-nota">Para: #{c.para}</span>
+                    </div>
+                    <strong>#{c.asunto}</strong>
+                    <span>#{c.cuerpo}</span>
+                </div>
+            </ui:repeat>
+        </p:fieldset>
+    </h:form>
+</ui:composition>

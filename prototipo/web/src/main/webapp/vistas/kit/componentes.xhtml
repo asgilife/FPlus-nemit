@@ -1,0 +1,189 @@
+<!--
+  Catálogo de componentes del kit: lo que usan las vistas del prototipo, con el tema del proyecto.
+  Regla: un componente que una vista necesita y no está aquí, se agrega aquí primero (con nombre genérico).
+  Referencia de uso de más componentes de PrimeFaces: la carpeta de ejemplos de código del proyecto, si la tiene.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="title">Catálogo de componentes</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1>Catálogo de componentes</h1>
+            <p class="proto-suave">Cámbiale el tema desde la barra para verlo en los tres.</p>
+        </div>
+
+        <h:form id="kit">
+            <p:growl id="growl" life="2500"/>
+
+            <div class="ime-card">
+                <h2>Botones</h2>
+                <div class="proto-fila">
+                    <p:commandButton value="Guardar" icon="pi pi-check" type="button"/>
+                    <p:commandButton value="Secundario" type="button" styleClass="ui-button-outlined"/>
+                    <p:commandButton value="Eliminar" icon="pi pi-trash" type="button" styleClass="ui-button-danger"/>
+                    <p:commandButton value="Aviso" icon="pi pi-exclamation-triangle" type="button" styleClass="ui-button-warning"/>
+                    <p:commandButton value="Texto" type="button" styleClass="ui-button-flat"/>
+                    <p:commandButton value="Deshabilitado" type="button" disabled="true"/>
+                    <p:commandButton icon="pi pi-bell" type="button" styleClass="ui-button-outlined" title="Solo icono"/>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <h2>Formulario</h2>
+                <div class="proto-formulario">
+                    <div class="proto-campo">
+                        <p:outputLabel for="texto" value="Texto"/>
+                        <p:inputText id="texto" value="#{kitView.texto}" placeholder="Escribe algo"/>
+                    </div>
+                    <div class="proto-campo">
+                        <p:outputLabel for="opcion" value="Lista"/>
+                        <p:selectOneMenu id="opcion" value="#{kitView.opcion}">
+                            <f:selectItem itemLabel="Opción A" itemValue="A"/>
+                            <f:selectItem itemLabel="Opción B" itemValue="B"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="proto-campo">
+                        <p:outputLabel for="cantidad" value="Número"/>
+                        <p:inputNumber id="cantidad" value="#{kitView.cantidad}" decimalPlaces="0" thousandSeparator=""/>
+                    </div>
+                    <div class="proto-campo">
+                        <p:outputLabel for="fecha" value="Fecha"/>
+                        <p:datePicker id="fecha" value="#{kitView.fecha}" pattern="yyyy-MM-dd" showIcon="true"/>
+                    </div>
+                    <div class="proto-campo proto-ancho-completo">
+                        <p:outputLabel for="obs" value="Texto largo"/>
+                        <p:inputTextarea id="obs" rows="3" autoResize="false"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <h2>Estados</h2>
+                <div class="proto-fila">
+                    <p:tag value="Completado" severity="success"/>
+                    <p:tag value="En curso" severity="info"/>
+                    <p:tag value="Pendiente" severity="warning"/>
+                    <p:tag value="Rechazado" severity="danger"/>
+                    <p:tag value="Borrador"/>
+                </div>
+                <div class="proto-pila">
+                    <p:staticMessage severity="info" summary="Información" detail="El cambio se verá al sincronizar."/>
+                    <p:staticMessage severity="warn" summary="Aviso" detail="Hay 2 registros sin revisar."/>
+                    <p:staticMessage severity="error" summary="Error" detail="No se pudo guardar: falta la firma."/>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <h2>Indicadores</h2>
+                <div class="grid">
+                    <div class="col-12 md:col-4"><div class="ime-card proto-kpi"><span class="proto-kpi__valor">128</span><span class="proto-kpi__etiqueta">Registros del día</span></div></div>
+                    <div class="col-12 md:col-4"><div class="ime-card proto-kpi"><span class="proto-kpi__valor">94 %</span><span class="proto-kpi__etiqueta">Cumplimiento</span><p:progressBar value="94" showValue="false" styleClass="proto-barra"/></div></div>
+                    <div class="col-12 md:col-4">
+                        <div class="ime-card proto-kpi">
+                            <span class="proto-kpi__valor"><span class="proto-cambio__antes">2.5</span> → <span class="proto-cambio__peor">1.5</span></span>
+                            <span class="proto-kpi__etiqueta">Cambio de un valor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <h2>Hitos en el tiempo</h2>
+                <p:chronoline value="#{kitView.hitos}" var="h" align="left" styleClass="proto-hitos">
+                    <div class="proto-hito">
+                        <strong class="proto-hito__hora">#{h.hora}</strong>
+                        <span>#{h.titulo}</span>
+                        <p:tag value="#{h.detalle}" severity="#{h.severidad}"/>
+                    </div>
+                </p:chronoline>
+            </div>
+
+            <div class="ime-card">
+                <h2>Opción elegible</h2>
+                <p:selectOneRadio id="eleccion" value="#{kitView.eleccion}" layout="custom">
+                    <f:selectItem itemValue="recomendada"/>
+                    <f:selectItem itemValue="otra"/>
+                </p:selectOneRadio>
+                <div class="proto-pila">
+                    <label class="proto-opcion">
+                        <span class="proto-opcion__cabeza">
+                            <p:radioButton for="eleccion" itemIndex="0"/>
+                            <strong>Opción recomendada</strong>
+                            <p:tag value="Recomendada" severity="info"/>
+                        </span>
+                        <span class="proto-opcion__cuerpo">
+                            <span><small>SE GANA</small>Lo que salva</span>
+                            <span><small>SE PIERDE</small>Lo que cuesta</span>
+                            <span class="proto-ancho-completo"><small>POR QUÉ</small>La razón, en el lenguaje del cliente.</span>
+                        </span>
+                    </label>
+                    <label class="proto-opcion">
+                        <span class="proto-opcion__cabeza">
+                            <p:radioButton for="eleccion" itemIndex="1"/>
+                            <strong>Otra opción</strong>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <h2>Pestañas, tabla y diálogo</h2>
+                <p:tabView>
+                    <p:tab title="Tabla">
+                        <p:dataTable value="#{kitView.hitos}" var="h" styleClass="ime-table-dense" reflow="true">
+                            <p:column headerText="Hora">#{h.hora}</p:column>
+                            <p:column headerText="Paso">#{h.titulo}</p:column>
+                            <p:column headerText="Estado"><p:tag value="#{h.detalle}" severity="#{h.severidad}"/></p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="Diálogo">
+                        <p:commandButton value="Abrir diálogo" type="button" onclick="PF('dlgKit').show()"/>
+                        <p:commandButton value="Notificación" icon="pi pi-bell" styleClass="ui-button-outlined"
+                                         actionListener="#{kitView.notificar}" process="@this" update=":kit:growl"/>
+                    </p:tab>
+                </p:tabView>
+            </div>
+
+            <div class="ime-card">
+                <h2>Señales en tablas y formularios</h2>
+                <p:dataTable value="#{kitView.hitos}" var="h" styleClass="ime-table-dense" reflow="true"
+                             rowStyleClass="#{h.severidad eq 'warning' ? 'proto-fila-atencion' : null}">
+                    <p:column headerText="Paso">#{h.titulo}</p:column>
+                    <p:column headerText="Valor" styleClass="proto-num">
+                        <h:outputText value="#{h.hora}" styleClass="#{h.severidad eq 'warning' ? 'proto-valor-alerta' : null}"/>
+                    </p:column>
+                </p:dataTable>
+                <div class="proto-etiquetas">
+                    <p:tag value="Autorizado en ERSA" severity="success"/>
+                    <p:tag value="Regresado a ERSA" severity="danger"/>
+                </div>
+                <p class="proto-nota">Capturó: un usuario · nota pequeña bajo un campo o un valor.</p>
+                <p class="proto-suave">Fila que pide atención (<code>rowStyleClass="proto-fila-atencion"</code>), valor fuera de su
+                    límite (<code>proto-valor-alerta</code>, acompañado de un icono) nota (<code>proto-nota</code>) y varias etiquetas en una celda (<code>proto-etiquetas</code>).
+                    Una tabla con muchas columnas lleva <code>proto-tabla-ancha</code>: se apila por debajo de 1200 px.</p>
+            </div>
+
+            <div class="ime-card">
+                <h2>Solo para prototipos</h2>
+                <div class="proto-pregunta">¿Quién captura este dato hoy? (P-NNN)</div>
+                <p class="proto-suave">Una pregunta abierta, a la vista donde la pantalla la plantea. No forma parte del producto.</p>
+            </div>
+        </h:form>
+
+        <p:dialog widgetVar="dlgKit" header="¿Cancelar el registro?" modal="true" responsive="true" width="420">
+            <h:form id="dlgKitForm">
+                <p>El registro queda cancelado y no se puede reabrir.</p>
+                <div class="proto-acciones">
+                    <p:commandButton value="Volver" type="button" styleClass="ui-button-outlined" onclick="PF('dlgKit').hide()"/>
+                    <p:commandButton value="Cancelar registro" type="button" styleClass="ui-button-danger" onclick="PF('dlgKit').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

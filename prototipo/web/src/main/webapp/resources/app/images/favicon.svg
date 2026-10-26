@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-95.19 -9.125 700 700" width="32" height="32" role="img" aria-label="Nemitec">
+  <title>Nemitec</title>
+  <!-- El hexágono de Nemit (los tres polígonos del isotipo de nemit-logo-color.svg, sin mover) en blanco sobre el azul
+       de marca. -->
+  <rect x="-95.19" y="-9.125" width="700" height="700" rx="120" fill="#1A5E9D"/>
+  <path fill="#FFFFFF" d="M 253.81,508.08 L 253.81,396.66 L 156.81,340.40 L 156.81,228.42 L 253.81,172.50 L 253.81,60.81 L 60.81,172.24 L 60.81,396.68 Z"/>
+  <path fill="#FFFFFF" d="M 314.81,95.06 L 314.81,179.06 L 387.81,221.26 L 387.81,137.28 Z"/>
+  <path fill="#FFFFFF" d="M 254.81,172.51 L 254.81,284.68 L 351.81,340.68 L 351.81,452.71 L 254.81,508.67 L 254.81,620.94 L 448.81,508.41 L 448.81,284.70 Z"/>
+</svg>

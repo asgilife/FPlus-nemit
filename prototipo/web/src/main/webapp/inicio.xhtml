@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="title">Inicio</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header">
+            <h1>FPlus</h1>
+            <p class="proto-suave">Prototipo navegable con datos simulados. Las pantallas, los componentes y el aspecto son
+                los del sistema final; los datos no son de la operación.</p>
+        </div>
+
+        <div class="ime-card">
+            <h2>Recorrido: de la captura de ERSA a la revisión de Fresnillo</h2>
+            <p class="proto-suave">Primer corte (HU-001, HU-002, HU-003, HU-006 y HU-007). Cambia de rol en la barra para
+                ver a cada actor; empieza con «Reiniciar datos».</p>
+            <ol class="proto-pila">
+                <li><strong>ERSA · capturista 1</strong>: abre el lote P20260970 con el código LF20260970, captura una parte y guarda.</li>
+                <li><strong>ERSA · capturista 2</strong>: completa el mismo lote y lo envía a revisión.</li>
+                <li><strong>ERSA · revisor</strong> y <strong>ERSA · autorizador</strong>: lo revisan y lo autorizan.</li>
+                <li><strong>Fresnillo · revisa ensayes</strong>: compara contra la mina, mira el P20260943 (plata en rojo) y regresa el P20260951 con una observación.</li>
+                <li><strong>ERSA · capturista 1</strong>: confirma o corrige el lote regresado.</li>
+            </ol>
+            <div class="proto-fila">
+                <p:linkButton outcome="/vistas/ensayes/captura-ersa" value="Captura de ensayes (ERSA)" icon="pi pi-pencil"
+                              rendered="#{sesionDemo.esDe('ERSA')}"/>
+                <p:linkButton outcome="/vistas/ensayes/revision-fresnillo" value="Revisión de ensayes (Fresnillo)" icon="pi pi-chart-bar"
+                              rendered="#{sesionDemo.esDe('Fresnillo')}"/>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="col-12 md:col-6 lg:col-4">
+                <div class="ime-card proto-tarjeta-enlace">
+                    <h3><i class="pi pi-list"/> Registros (ejemplo)</h3>
+                    <p class="proto-suave">La historia de ejemplo del kit: lista con filtros, detalle, alta validada por el
+                        servicio y cancelación con confirmación.</p>
+                    <p:linkButton outcome="/vistas/ejemplo/registros" value="Abrir" icon="pi pi-arrow-right" iconPos="right"/>
+                </div>
+            </div>
+            <div class="col-12 md:col-6 lg:col-4">
+                <div class="ime-card proto-tarjeta-enlace">
+                    <h3><i class="pi pi-th-large"/> Catálogo de componentes</h3>
+                    <p class="proto-suave">Todo lo que usan las pantallas del prototipo, con el tema del proyecto. Lo que no
+                        está aquí se agrega aquí primero.</p>
+                    <p:linkButton outcome="/vistas/kit/componentes" value="Abrir" icon="pi pi-arrow-right" iconPos="right"
+                                  styleClass="ui-button-outlined"/>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

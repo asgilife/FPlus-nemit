@@ -1,0 +1,52 @@
+/* ==========================================================================
+   nemit-tema/tokens.css — tema «Nemit moderno»
+   La paleta y las medidas. Mismos nombres que el resto de los temas: la estructura (layout.css) y el kit (kit.css) solo
+   leen estas variables. Contraste del texto sobre su superficie: ≥ 4.5:1 (AA), y el texto secundario ≥ 7:1.
+   ========================================================================== */
+
+:root {
+  --nemit-azul:       #1A5E9D;
+  --nemit-azul-claro: #4DA4E0;
+  --nemit-gris:       #737373;
+
+  --ime-topbar-h:  60px;
+  --ime-menu-w:   248px;
+  --ime-radius:    12px;
+  --ime-font-base: 14px;
+  --ime-gap:       16px;
+  --ime-card-pad:  20px;
+  --ime-shadow:    0 1px 2px rgba(16, 24, 40, .05), 0 1px 3px rgba(16, 24, 40, .08);
+}
+
+/* ── claro (por omisión) ─────────────────────────────────────────────────── */
+[data-ime-theme="claro"] {
+  color-scheme: light;
+  --ime-color-primary:          var(--nemit-azul);
+  --ime-color-primary-hover:    #154d82;
+  --ime-color-primary-contrast: #ffffff;
+  --ime-color-surface:          #f4f6fa;
+  --ime-color-surface-2:        #ffffff;
+  --ime-color-surface-3:        #e3e8ef;
+  --ime-color-text:             #101828;
+  --ime-color-text-muted:       #475467;
+  --ime-color-ok:               #067647;
+  --ime-color-warn:             #b54708;
+  --ime-color-danger:           #d92d20;
+}
+
+/* ── oscuro ──────────────────────────────────────────────────────────────── */
+[data-ime-theme="oscuro"] {
+  color-scheme: dark;
+  --ime-color-primary:          #61a8e8;
+  --ime-color-primary-hover:    #7bb7ec;
+  --ime-color-primary-contrast: #0c111d;
+  --ime-color-surface:          #0c111d;
+  --ime-color-surface-2:        #161b26;
+  --ime-color-surface-3:        #2a3242;
+  --ime-color-text:             #f5f7fa;
+  --ime-color-text-muted:       #a5adbb;
+  --ime-color-ok:               #47cd89;
+  --ime-color-warn:             #fdb022;
+  --ime-color-danger:           #f97066;
+  --ime-shadow:                 0 1px 2px rgba(0, 0, 0, .4);
+}

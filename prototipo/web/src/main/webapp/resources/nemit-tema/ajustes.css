@@ -1,0 +1,90 @@
+/* ==========================================================================
+   nemit-tema/ajustes.css — tema «Nemit moderno»
+   Se carga al final, después del CSS de componentes de PrimeFaces: aquí van los retoques de componentes y de la
+   estructura. Superficies neutras, esquinas redondeadas, sombras suaves; el color de marca solo donde hay acción.
+   ========================================================================== */
+
+/* ── Menú lateral claro: píldoras y la página activa resaltada ───────────── */
+.layout-menu { padding: .75rem; }
+.layout-menu a { border-radius: 10px; font-weight: 500; color: var(--ime-color-text-muted) !important; }
+.layout-menu a:hover { background: var(--ime-color-surface) !important; color: var(--ime-color-text) !important; }
+.layout-menu a[aria-current="page"] {
+  background: var(--primary-100) !important;
+  color: var(--ime-color-primary) !important;
+  font-weight: 600;
+}
+.layout-menu a[aria-current="page"] .pi { color: var(--ime-color-primary); }
+.nav-section { padding: 18px 14px 6px; letter-spacing: .1em; }
+
+/* ── Encabezado de página: título en el color del texto y más presencia ──── */
+.page-header h1, .page-header .page-title { color: var(--ime-color-text); font-size: 1.625rem; font-weight: 700; letter-spacing: -.02em; }
+
+/* ── Selector de variante: segmento de píldoras ──────────────────────────── */
+.ime-theme-opt { border-radius: 999px; padding: .25rem .7rem; }
+.ime-theme-opt.active { background: var(--primary-100); color: var(--ime-color-primary); }
+
+/* ── Tarjetas del kit: más aire y número grande ──────────────────────────── */
+.ime-card { border-radius: var(--ime-radius); }
+.proto-kpi { padding: var(--ime-card-pad); }
+.proto-kpi__valor { font-size: 2.25rem; font-weight: 700; letter-spacing: -.03em; }
+.proto-kpi__etiqueta { font-size: 13px; font-weight: 500; }
+
+/* ── Botones y campos ────────────────────────────────────────────────────── */
+body .ui-button { border-radius: 10px; font-weight: 600; }
+body .ui-button:not(.ui-button-outlined):not(.ui-button-flat):not(:disabled) {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .12);
+}
+body .ui-button.ui-button-outlined { border-color: var(--ime-color-surface-3); color: var(--ime-color-text); background: var(--ime-color-surface-2); }
+body .ui-button.ui-button-outlined:enabled:hover { background: var(--ime-color-surface); border-color: var(--ime-color-text-muted); color: var(--ime-color-text); }
+body .ui-inputfield, body .ui-selectonemenu, body .ui-inputnumber input, body .ui-calendar input { border-radius: 10px; }
+
+/* ── Diálogos: cabecera neutra, esquinas y sombra grandes ────────────────── */
+body .ui-dialog { border-radius: 16px; overflow: hidden; box-shadow: 0 24px 48px rgba(16, 24, 40, .22); border: 0; }
+body .ui-dialog .ui-dialog-titlebar { background: var(--ime-color-surface-2); color: var(--ime-color-text); border-bottom: 1px solid var(--ime-color-surface-3); padding: 1.1rem 1.25rem; }
+body .ui-dialog .ui-dialog-title { font-weight: 700; font-size: 1.05rem; }
+body .ui-dialog .ui-dialog-content { background: var(--ime-color-surface-2); }
+
+/* ── Tabla: contenedor redondeado, cabecera neutra, filas limpias ────────── */
+body .ui-datatable { border: 1px solid var(--ime-color-surface-3); border-radius: var(--ime-radius); overflow: hidden; }
+body .ui-datatable .ui-datatable-thead > tr > th {
+  background: var(--ime-color-surface);
+  color: var(--ime-color-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border-color: var(--ime-color-surface-3);
+  border-width: 0 0 1px 0;
+}
+body .ui-datatable .ui-datatable-data > tr > td { border-color: var(--ime-color-surface-3); border-width: 0 0 1px 0; }
+body .ui-datatable .ui-datatable-data > tr { background: var(--ime-color-surface-2); }
+body .ui-datatable .ui-datatable-data > tr:hover { background: var(--primary-50); }
+body .ui-datatable .ui-datatable-data > tr.ui-state-highlight { background: var(--primary-100); color: var(--ime-color-text); }
+body .ui-datatable .ui-paginator { border: 0; background: var(--ime-color-surface-2); }
+
+/* ── Paginador: página activa con un toque de marca ──────────────────────── */
+body .ui-paginator .ui-paginator-page.ui-state-active { background: var(--primary-100); color: var(--ime-color-primary); border-radius: 10px; }
+
+/* ── Estados: píldoras con tinte suave del color del estado ──────────────── */
+body .ui-tag { border-radius: 999px; padding: .2rem .7rem; font-size: 12px; font-weight: 600; white-space: nowrap; }
+body .ui-tag.ui-tag-success { background: color-mix(in srgb, var(--ime-color-ok) 15%, var(--ime-color-surface-2)); color: var(--ime-color-ok); }
+body .ui-tag.ui-tag-info    { background: color-mix(in srgb, var(--ime-color-primary) 15%, var(--ime-color-surface-2)); color: var(--ime-color-primary); }
+body .ui-tag.ui-tag-warning { background: color-mix(in srgb, var(--ime-color-warn) 17%, var(--ime-color-surface-2)); color: var(--ime-color-warn); }
+body .ui-tag.ui-tag-danger  { background: color-mix(in srgb, var(--ime-color-danger) 15%, var(--ime-color-surface-2)); color: var(--ime-color-danger); }
+body .ui-tag:not(.ui-tag-success):not(.ui-tag-info):not(.ui-tag-warning):not(.ui-tag-danger) {
+  background: var(--ime-color-surface-3); color: var(--ime-color-text);
+}
+
+/* ── Mensajes: esquinas redondeadas ──────────────────────────────────────── */
+body .ui-message, body .ui-messages > div { border-radius: 12px; }
+
+/* ── Opción elegible: borde fino y elegida con tinte de marca ────────────── */
+.proto-opcion { border-width: 1px; border-radius: var(--ime-radius); }
+.proto-opcion:has(.ui-radiobutton-box.ui-state-active) { background: var(--primary-50); border-color: var(--ime-color-primary); }
+
+/* Selector de rol de la barra (con autoWidth="false"): ancho fijo y el nombre del rol con puntos suspensivos.
+   Aquí y no en kit.css, porque components.css de PrimeFaces se carga después y le gana */
+body .proto-rol__menu.ui-selectonemenu { width: 220px; }
+@media (max-width: 640px) {
+  body .proto-rol__menu.ui-selectonemenu { width: 140px; }
+}

@@ -1,0 +1,196 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Flujo Mina Peñoles" id="Tlw5mYt3cU3Td8WN39mV">
+    <mxGraphModel dx="1326" dy="632" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Loj-oBqg_Fub7s55abS7-1" parent="1" style="swimlane;whiteSpace=wrap;html=1;fontStyle=1;startSize=23;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" value="1. PROCESO EN MINA" vertex="1">
+          <mxGeometry height="260" width="340" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-2" parent="Loj-oBqg_Fub7s55abS7-1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Mina" vertex="1">
+          <mxGeometry height="60" width="60" x="50" y="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-4" parent="Loj-oBqg_Fub7s55abS7-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Ensaye Mina" vertex="1">
+          <mxGeometry height="40" width="120" x="190" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-5" parent="Loj-oBqg_Fub7s55abS7-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Envía camión concentrado" vertex="1">
+          <mxGeometry height="40" width="150" x="160" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-8" edge="1" parent="Loj-oBqg_Fub7s55abS7-1" source="Loj-oBqg_Fub7s55abS7-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-3" parent="Loj-oBqg_Fub7s55abS7-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Saca muestra de camión" vertex="1">
+          <mxGeometry height="40" width="140" x="10" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-6" edge="1" parent="Loj-oBqg_Fub7s55abS7-1" source="Loj-oBqg_Fub7s55abS7-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-7" edge="1" parent="Loj-oBqg_Fub7s55abS7-1" source="Loj-oBqg_Fub7s55abS7-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-4" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-9" parent="1" style="swimlane;whiteSpace=wrap;html=1;fontStyle=1;startSize=23;fillColor=#eeeeee;strokeColor=#36393d;" value="2. PROCESO EN METMEX PEÑOLES" vertex="1">
+          <mxGeometry height="340" width="580" x="440" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-10" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Llega a destino (MetMex Peñoles)" vertex="1">
+          <mxGeometry height="40" width="180" x="200" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-11" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Se obtienen Muestras del lote" vertex="1">
+          <mxGeometry height="40" width="180" x="200" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-12" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Muestra para Fresnillo" vertex="1">
+          <mxGeometry height="40" width="130" x="20" y="198" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-13" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Ensaye Fresnillo" vertex="1">
+          <mxGeometry height="40" width="120" x="25" y="393" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-14" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Muestra Lab Central" vertex="1">
+          <mxGeometry height="40" width="130" x="225" y="198" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-15" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Ensaye Lab Central" vertex="1">
+          <mxGeometry height="40" width="120" x="230" y="283" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-16" parent="Loj-oBqg_Fub7s55abS7-9" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eeeeee;strokeColor=#36393d;" value="Muestra Tercerías" vertex="1">
+          <mxGeometry height="40" width="130" x="420" y="198" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-18" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;" target="Loj-oBqg_Fub7s55abS7-11" value="Recibe lote 1 a 15 camiones">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-19" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-12" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-20" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-13" value="Procesa ERSA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-21" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-22" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-15" value="Procesa">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-23" edge="1" parent="Loj-oBqg_Fub7s55abS7-9" source="Loj-oBqg_Fub7s55abS7-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Comparación" vertex="1">
+          <mxGeometry height="40" width="120" x="670" y="413" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-26" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" value="Diferencia en &lt;br&gt;límite de partición" vertex="1">
+          <mxGeometry height="91" width="105" x="677.5" y="491" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-28" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Promedia (Negociado)" vertex="1">
+          <mxGeometry height="40" width="130" x="665" y="642" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-29" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" value="Ensaye Tercero" vertex="1">
+          <mxGeometry height="40" width="120" x="865" y="642" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-31" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" value="Terminación de ensaye por elemento" vertex="1">
+          <mxGeometry height="57" width="120" x="865" y="842" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-63" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-61">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="760" />
+              <mxPoint x="1030" y="662" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-32" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" value="Revisión" vertex="1">
+          <mxGeometry height="40" width="130" x="860" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-33" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;" value="Validación manual Peñoles - Fresnillo - Tercero" vertex="1">
+          <mxGeometry height="40" width="180" x="1055" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-35" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fad9d5;strokeColor=#ae4132;" value="¿Hay acuerdo?" vertex="1">
+          <mxGeometry height="91" width="90" x="1100" y="825" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-37" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-38" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;fontColor=#cc0000;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-58" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" y="350" as="sourcePoint" />
+            <mxPoint x="395" y="460" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-39" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-25" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-40" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="Loj-oBqg_Fub7s55abS7-25" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="730" y="380" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-41" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-26" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-43" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;" target="Loj-oBqg_Fub7s55abS7-28" value="Si, En rango">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-44" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-31" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-45" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;" target="Loj-oBqg_Fub7s55abS7-17" value="No">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-46" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-29" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-47" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-32" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="925" y="725" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-50" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-31" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-53" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-35" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-55" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;" target="Loj-oBqg_Fub7s55abS7-31" value="Sí">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1130" y="842" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-56" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-35" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-11" value="No">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1250" y="870.5" />
+              <mxPoint x="1250" y="110" />
+              <mxPoint x="775" y="110" />
+            </Array>
+            <mxPoint x="1160" y="890" as="sourcePoint" />
+            <mxPoint x="1150" y="180" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;" value="Solicita proceso con Tercero" vertex="1">
+          <mxGeometry height="40" width="150" x="850" y="516" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-24" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="Loj-oBqg_Fub7s55abS7-17" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-64" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="290" y="480" />
+              <mxPoint x="525" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-58" parent="1" style="rectangle;whiteSpace=wrap;html=1;shapeInside=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Validación" vertex="1">
+          <mxGeometry height="53" width="80" x="250" y="406.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-59" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-58">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-60" parent="1" style="text;html=1;whiteSpace=wrap;overflow=hidden;rounded=0;" value="&lt;h1 style=&quot;margin-top: 0px;&quot;&gt;Validación ERSA&lt;/h1&gt;&lt;p&gt;Como se reciben los ensayes&lt;/p&gt;" vertex="1">
+          <mxGeometry height="80" width="200" x="306" y="499" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-62" edge="1" parent="1" source="Loj-oBqg_Fub7s55abS7-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="Loj-oBqg_Fub7s55abS7-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Loj-oBqg_Fub7s55abS7-61" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;aspect=fixed;fillColor=#fad9d5;strokeColor=#ae4132;" value="Excepción" vertex="1">
+          <mxGeometry height="70" width="70" x="1110" y="627" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

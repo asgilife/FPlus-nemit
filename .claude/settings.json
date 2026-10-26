@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "nemit-agents-dev-squad": {
+      "source": { "source": "github", "repo": "ing-valenzuela-galvan/nemit-agents-dev-squad" }
+    }
+  },
+  "enabledPlugins": {
+    "nemit@nemit-agents-dev-squad": true
+  }
+}

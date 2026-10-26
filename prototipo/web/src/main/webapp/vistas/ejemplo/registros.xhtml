@@ -1,0 +1,155 @@
+<!--
+  Vista de ejemplo del kit (HU-000). Copiar como vistas/<tema>/<pantalla>.xhtml para cada historia, con su View y su
+  servicio simulado. Cabecera de cada vista real: la historia (HU-NNN), los requisitos que cubre, los supuestos y la fecha.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="title">Registros</ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <!-- La notificación lleva los avisos de éxito; los rechazos van junto a donde se capturó (diálogo) -->
+            <p:growl id="mensajes" showDetail="false" life="3500" severity="info"/>
+
+            <div class="page-header proto-encabezado">
+                <div>
+                    <h1>Registros</h1>
+                    <p class="proto-suave">Los registros del día, del más reciente al más antiguo.</p>
+                </div>
+                <p:commandButton value="Nuevo registro" icon="pi pi-plus"
+                                 actionListener="#{registrosView.prepararNuevo}"
+                                 process="@this" update=":dlgNuevoForm" oncomplete="PF('dlgNuevo').show()"
+                                 rendered="#{sesionDemo.es('Supervisor,Administrador')}"/>
+            </div>
+
+            <div class="grid">
+                <div class="col-12 md:col-4">
+                    <div class="ime-card proto-kpi">
+                        <span class="proto-kpi__valor">#{registrosView.total}</span>
+                        <span class="proto-kpi__etiqueta">Registros</span>
+                    </div>
+                </div>
+                <div class="col-12 md:col-4">
+                    <div class="ime-card proto-kpi">
+                        <span class="proto-kpi__valor">#{registrosView.contar('PENDIENTE')}</span>
+                        <span class="proto-kpi__etiqueta">Pendientes</span>
+                    </div>
+                </div>
+                <div class="col-12 md:col-4">
+                    <div class="ime-card proto-kpi">
+                        <span class="proto-kpi__valor">#{registrosView.contar('COMPLETADO')}</span>
+                        <span class="proto-kpi__etiqueta">Completados</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ime-card">
+                <div class="proto-filtros">
+                    <p:inputText id="buscar" value="#{registrosView.texto}" placeholder="Buscar por folio o responsable">
+                        <p:ajax event="keyup" delay="300" listener="#{registrosView.filtrar}" update="tabla"/>
+                    </p:inputText>
+                    <p:selectOneMenu id="filtroEstado" value="#{registrosView.estado}">
+                        <f:selectItem itemLabel="Todos los estados" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{registrosView.estados}" var="e" itemLabel="#{e.texto}" itemValue="#{e}"/>
+                        <p:ajax listener="#{registrosView.filtrar}" update="tabla"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <p:dataTable id="tabla" value="#{registrosView.registros}" var="r" rowKey="#{r.folio}"
+                             selectionMode="single" selection="#{registrosView.seleccionado}"
+                             paginator="true" rows="10" paginatorPosition="bottom"
+                             emptyMessage="No hay registros para estos filtros." styleClass="ime-table-dense"
+                             reflow="true">
+                    <p:ajax event="rowSelect" update=":dlgDetalleForm" oncomplete="PF('dlgDetalle').show()"/>
+                    <p:column headerText="Folio" sortBy="#{r.folio}">
+                        <h:outputText value="#{r.folio}" styleClass="proto-fuerte"/>
+                    </p:column>
+                    <p:column headerText="Fecha" sortBy="#{r.fecha}">
+                        <h:outputText value="#{r.fecha}">
+                            <f:convertDateTime type="localDateTime" pattern="yyyy-MM-dd HH:mm"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Responsable" sortBy="#{r.responsable}">#{r.responsable}</p:column>
+                    <p:column headerText="Estado">
+                        <p:tag value="#{r.estado.texto}" severity="#{r.estado.severidad}"/>
+                    </p:column>
+                    <p:column headerText="Cantidad" styleClass="proto-num">#{r.cantidad}</p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+
+        <!-- Detalle -->
+        <p:dialog id="dlgDetalle" widgetVar="dlgDetalle" header="Detalle del registro" modal="true" responsive="true"
+                  width="520" closeOnEscape="true">
+            <h:form id="dlgDetalleForm">
+                <ui:fragment rendered="#{registrosView.seleccionado != null}">
+                    <div class="proto-campos">
+                        <span>Folio</span><strong>#{registrosView.seleccionado.folio}</strong>
+                        <span>Estado</span><p:tag value="#{registrosView.seleccionado.estado.texto}"
+                                                  severity="#{registrosView.seleccionado.estado.severidad}"/>
+                        <span>Responsable</span><span>#{registrosView.seleccionado.responsable}</span>
+                        <span>Cantidad</span><span>#{registrosView.seleccionado.cantidad}</span>
+                        <span>Observaciones</span><span>#{empty registrosView.seleccionado.observaciones ? '—' : registrosView.seleccionado.observaciones}</span>
+                    </div>
+                    <div class="proto-acciones">
+                        <p:commandButton value="Cancelar registro" icon="pi pi-times" styleClass="ui-button-danger"
+                                         actionListener="#{registrosView.cancelarSeleccionado}"
+                                         process="@this" update=":form:tabla :form:mensajes :dlgDetalleForm"
+                                         rendered="#{registrosView.seleccionado.cancelable and sesionDemo.es('Supervisor,Administrador')}">
+                            <p:confirm header="¿Cancelar el registro?" message="El registro queda cancelado y no se puede reabrir."
+                                       icon="pi pi-exclamation-triangle"/>
+                        </p:commandButton>
+                        <p:commandButton value="Cerrar" type="button" styleClass="ui-button-outlined"
+                                         onclick="PF('dlgDetalle').hide()"/>
+                    </div>
+                </ui:fragment>
+            </h:form>
+        </p:dialog>
+
+        <!-- Alta: la validación la hace el servicio, no un required de la pantalla -->
+        <p:dialog id="dlgNuevo" widgetVar="dlgNuevo" header="Nuevo registro" modal="true" responsive="true" width="520">
+            <h:form id="dlgNuevoForm">
+                <p:messages id="erroresNuevo" closable="false" severity="error,warn"/>
+                <div class="proto-formulario">
+                    <div class="proto-campo">
+                        <p:outputLabel for="responsable" value="Responsable"/>
+                        <p:selectOneMenu id="responsable" value="#{registrosView.nuevoResponsable}">
+                            <f:selectItem itemLabel="Selecciona…" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{registrosView.responsables}"/>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="proto-campo">
+                        <p:outputLabel for="cantidad" value="Cantidad"/>
+                        <p:inputNumber id="cantidad" value="#{registrosView.nuevaCantidad}" decimalPlaces="0"
+                                       thousandSeparator=""/>
+                    </div>
+                    <div class="proto-campo proto-ancho-completo">
+                        <p:outputLabel for="observaciones" value="Observaciones (opcional)"/>
+                        <p:inputTextarea id="observaciones" value="#{registrosView.nuevasObservaciones}" rows="3"
+                                         autoResize="false"/>
+                    </div>
+                </div>
+                <div class="proto-acciones">
+                    <p:commandButton id="guardar" value="Guardar" icon="pi pi-check"
+                                     actionListener="#{registrosView.guardar}"
+                                     process="@form" update="@form :form:tabla :form:mensajes"/>
+                    <p:commandButton value="Cancelar" type="button" styleClass="ui-button-outlined"
+                                     onclick="PF('dlgNuevo').hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Todo botón de PrimeFaces vive dentro de un h:form, también los del diálogo de confirmación -->
+        <h:form id="confirmacionForm">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="420">
+                <p:commandButton value="Volver" type="button" styleClass="ui-confirmdialog-no ui-button-outlined"/>
+                <p:commandButton value="Sí, cancelar" type="button" styleClass="ui-confirmdialog-yes ui-button-danger"/>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

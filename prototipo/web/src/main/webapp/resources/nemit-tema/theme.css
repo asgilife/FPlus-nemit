@@ -1,0 +1,61 @@
+/* ==========================================================================
+   nemit-tema/theme.css — tema «Nemit moderno»
+   La base: variables de PrimeFaces apuntando a los tokens, tipografía y superficies. Los retoques de componentes van en
+   ajustes.css, que se carga después del CSS de componentes de PrimeFaces.
+   ========================================================================== */
+
+:root {
+  --primary-color:       var(--ime-color-primary);
+  --primary-color-text:  var(--ime-color-primary-contrast);
+  --primary-50:          color-mix(in srgb, var(--ime-color-primary) 7%,  var(--ime-color-surface-2));
+  --primary-100:         color-mix(in srgb, var(--ime-color-primary) 12%, var(--ime-color-surface-2));
+  --primary-200:         color-mix(in srgb, var(--ime-color-primary) 22%, var(--ime-color-surface-2));
+  --primary-700:         var(--ime-color-primary-hover);
+
+  --highlight-bg:         var(--primary-100);
+  --highlight-text-color: var(--ime-color-text);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--ime-color-primary) 30%, transparent);
+
+  --text-color:           var(--ime-color-text);
+  --text-color-secondary: var(--ime-color-text-muted);
+  --border-radius:        8px;
+
+  --error-color:   var(--ime-color-danger);
+  --warning-color: var(--ime-color-warn);
+  --success-color: var(--ime-color-ok);
+  --info-color:    var(--ime-color-primary);
+
+  --sidebar-bg:    var(--ime-color-surface-2);
+  --sidebar-text:  var(--ime-color-text);
+  --topbar-bg:     var(--ime-color-surface-2);
+
+  --font-family:    -apple-system, "Segoe UI Variable Text", "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-base: var(--ime-font-base);
+}
+
+body {
+  background:             var(--ime-color-surface);
+  font-family:            var(--font-family);
+  font-size:              14px;
+  color:                  var(--ime-color-text);
+  line-height:            1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout-sidebar { background: var(--ime-color-surface-2); border-right: 1px solid var(--ime-color-surface-3); }
+.layout-topbar  { background: var(--ime-color-surface-2); border-bottom: 1px solid var(--ime-color-surface-3); box-shadow: none; }
+
+h1, h2, h3, h4, h5, h6 { font-family: var(--font-family); font-weight: 650; color: var(--ime-color-text); margin: 0 0 .5rem; line-height: 1.25; }
+h1 { font-size: 1.5rem; letter-spacing: -.015em; }
+h2 { font-size: 1.125rem; }
+h3 { font-size: 1rem; }
+label { font-size: .875rem; font-weight: 500; }
+
+.card {
+  background:    var(--ime-color-surface-2);
+  border:        1px solid var(--ime-color-surface-3);
+  border-radius: var(--ime-radius);
+  box-shadow:    var(--ime-shadow);
+  padding:       var(--ime-card-pad);
+  margin-bottom: var(--ime-gap);
+}

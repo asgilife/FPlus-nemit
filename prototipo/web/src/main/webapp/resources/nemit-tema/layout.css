@@ -1,0 +1,440 @@
+/* ==========================================================================
+   nemit-tema/layout.css
+   Estructura de página de la plantilla Nemit
+   Layout: sidebar fijo 280px + topbar fijo 60px + contenido
+   ========================================================================== */
+
+/* ── Variables de layout ─────────────────────────────────────────────────── */
+:root {
+  --sidebar-width:    var(--ime-menu-w, 240px);
+  --topbar-height:    var(--ime-topbar-h, 56px);
+  --sidebar-bg:       var(--ime-color-surface-2);
+  --sidebar-text:     var(--ime-color-text);
+  --topbar-bg:        var(--ime-color-surface-2);
+  --topbar-shadow:    0 1px 4px rgba(0, 0, 0, 0.15);
+  --content-bg:       var(--ime-color-surface);
+  --transition-speed: 0.25s;
+}
+
+/* ── Reset base ──────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+
+/* ── Wrapper principal ───────────────────────────────────────────────────── */
+.layout-wrapper {
+  display:    flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.layout-sidebar {
+  position:   fixed;
+  top:        0;
+  left:       0;
+  width:      var(--sidebar-width);
+  height:     100vh;
+  background: var(--sidebar-bg);
+  color:      var(--sidebar-text);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index:    1000;
+  display:    flex;
+  flex-direction: column;
+  transition: transform var(--transition-speed) ease;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ime-color-surface-3) transparent;
+}
+.layout-sidebar::-webkit-scrollbar { width: 4px; }
+.layout-sidebar::-webkit-scrollbar-thumb { background: var(--ime-color-surface-3); border-radius: 2px; }
+
+/* ── Logo en sidebar ─────────────────────────────────────────────────────── */
+.layout-sidebar .sidebar-logo {
+  display:       flex;
+  align-items:   center;
+  gap:           0.75rem;
+  padding:       1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--ime-color-surface-3);
+  flex-shrink:   0;
+}
+.layout-sidebar .sidebar-logo img {
+  height: 36px;
+  width:  auto;
+}
+.layout-sidebar .sidebar-logo .logo-text {
+  font-size:   0.9375rem;
+  font-weight: 700;
+  color:       var(--ime-color-text);
+  line-height: 1.2;
+}
+.layout-sidebar .sidebar-logo .logo-sub {
+  font-size: 0.6875rem;
+  color:     var(--ime-color-text-muted);
+  display:   block;
+}
+
+/* ── Menú de navegación ──────────────────────────────────────────────────── */
+.layout-menu {
+  list-style: none;
+  margin:     0;
+  padding:    0.75rem 0.5rem;
+  flex:       1;
+}
+.layout-menu li { margin-bottom: 2px; }
+
+.layout-menu a,
+.layout-menu .p-menuitem-link {
+  display:       flex;
+  align-items:   center;
+  gap:           0.625rem;
+  padding:       0.625rem 0.875rem;
+  border-radius: 6px;
+  color:         var(--sidebar-text) !important;
+  font-size:     0.875rem;
+  font-weight:   400;
+  text-decoration: none;
+  transition:    background 0.15s, color 0.15s;
+  cursor:        pointer;
+}
+.layout-menu a:hover,
+.layout-menu .p-menuitem-link:hover,
+.layout-menu a.active-route,
+.layout-menu li.active-menuitem > a {
+  background: var(--ime-color-surface-3);
+  color:      var(--ime-color-text) !important;
+}
+
+.layout-menu .menu-section-title {
+  font-size:     0.6875rem;
+  font-weight:   600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color:         var(--ime-color-text-muted);
+  padding:       1rem 1rem 0.25rem;
+  margin-top:    0.5rem;
+}
+
+.layout-menu .pi {
+  font-size: 1rem;
+  width:     1rem;
+  flex-shrink: 0;
+}
+
+/* Submenu desplegable */
+.layout-menu .layout-submenu {
+  list-style:    none;
+  margin:        0;
+  padding:       0 0 0 1.75rem;
+  overflow:      hidden;
+  max-height:    0;
+  transition:    max-height 0.2s ease;
+}
+.layout-menu li.active-menuitem > .layout-submenu {
+  max-height: 500px;
+}
+.layout-menu .layout-submenu a {
+  padding:   0.5rem 0.875rem;
+  font-size: 0.8125rem;
+}
+
+/* ── Topbar ──────────────────────────────────────────────────────────────── */
+.layout-topbar {
+  position:   fixed;
+  top:        0;
+  left:       var(--sidebar-width);
+  right:      0;
+  height:     var(--topbar-height);
+  background: var(--topbar-bg);
+  box-shadow: var(--topbar-shadow);
+  z-index:    999;
+  display:    flex;
+  align-items: center;
+  padding:    0 1.5rem;
+  gap:        1rem;
+  transition: left var(--transition-speed) ease;
+}
+.layout-topbar .topbar-menu-button {
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  background:    none;
+  border:        none;
+  cursor:        pointer;
+  padding:       0.5rem;
+  color:         var(--text-color, #1e293b);
+  font-size:     1.25rem;
+  border-radius: 6px;
+  flex-shrink:   0;
+}
+.layout-topbar .topbar-menu-button:hover { background: var(--surface-100, #f1f5f9); }
+
+.layout-topbar .topbar-start { flex: 1; display: flex; align-items: center; gap: 1rem; }
+.layout-topbar .topbar-end   { display: flex; align-items: center; gap: 0.75rem; }
+
+.layout-topbar .topbar-breadcrumb { font-size: 0.875rem; color: var(--text-color-secondary, #64748b); }
+
+.topbar-user {
+  display:       flex;
+  align-items:   center;
+  gap:           0.5rem;
+  padding:       0.375rem 0.75rem;
+  border-radius: 6px;
+  cursor:        pointer;
+  color:         var(--text-color, #1e293b);
+  font-size:     0.875rem;
+  transition:    background 0.15s;
+}
+.topbar-user:hover { background: var(--surface-100, #f1f5f9); }
+.topbar-user .user-name { font-weight: 600; }
+.topbar-user .user-role { font-size: 0.75rem; color: var(--text-color-secondary, #64748b); }
+.topbar-user-avatar {
+  width:         32px;
+  height:        32px;
+  border-radius: 50%;
+  background:    var(--primary-color, #1e3a5f);
+  color:         #fff;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  font-weight:   700;
+  font-size:     0.8125rem;
+  flex-shrink:   0;
+}
+
+/* ── Topbar nuevo (layout-topbar-left / right) ───────────────────────────── */
+.layout-topbar {
+  display:      flex;
+  align-items:  center;
+  justify-content: space-between;
+  position:     fixed;
+  top:          0;
+  left:         var(--sidebar-width);
+  right:        0;
+  height:       var(--topbar-height);
+  background:   var(--ime-color-surface-2);
+  border-bottom: 1px solid var(--ime-color-surface-3);
+  padding:      0 var(--ime-gap, 1rem);
+  z-index:      999;
+  transition:   left var(--transition-speed) ease;
+}
+.layout-topbar-left  { display: flex; align-items: center; gap: .75rem; flex: 1 1 auto; min-width: 0; }
+.layout-topbar-right { display: flex; align-items: center; flex-shrink: 0; }
+
+/* Botón hamburguesa */
+.topbar-menu-btn {
+  display:       inline-flex;
+  align-items:   center;
+  justify-content: center;
+  width:  38px; height: 38px;
+  background:    transparent;
+  border:        1px solid var(--ime-color-surface-3);
+  border-radius: var(--ime-radius, 6px);
+  color:         var(--ime-color-text);
+  cursor:        pointer;
+  font-size:     1.1rem;
+  flex-shrink:   0;
+}
+.topbar-menu-btn:hover { background: var(--ime-color-surface-3); }
+
+/* Marca (logo + texto) */
+.topbar-brand {
+  display:     flex;
+  align-items: center;
+  gap:         .5rem;
+  font-weight: 700;
+  font-size:   1rem;
+  color:       var(--ime-color-text);
+  white-space: nowrap;
+}
+.brand-logo { height: 26px; width: auto; display: block; }
+/* Logo blanco en temas oscuros, color en tema claro. Aplica al topbar y al sidebar. */
+.brand-logo--white { display: block; }
+.brand-logo--color { display: none; }
+/* El logo depende de si la variante es clara u oscura (data-ime-modo), no de su nombre: cada tema nombra las suyas */
+[data-ime-modo="claro"] .brand-logo--white { display: none; }
+[data-ime-modo="claro"] .brand-logo--color { display: block; }
+
+.brand-text { overflow: hidden; text-overflow: ellipsis; }
+
+/* Formulario de acciones del topbar */
+.topbar-actions {
+  display:     flex !important;
+  align-items: center;
+  gap:         .5rem;
+}
+
+/* Selector de tema — idéntico a control-tower */
+.ime-theme {
+  display:     flex;
+  align-items: center;
+  gap:         .35rem;
+  color:       var(--ime-color-text-muted);
+}
+.ime-theme > i { font-size: .95rem; }
+.ime-theme-opt {
+  color:         var(--ime-color-text-muted);
+  text-decoration: none;
+  font-size:     .8rem;
+  padding:       .15rem .4rem;
+  border-radius: 6px;
+  white-space:   nowrap;
+  cursor:        pointer;
+  transition:    background .12s, color .12s;
+}
+.ime-theme-opt:hover  { background: var(--ime-color-surface-3); color: var(--ime-color-text); }
+.ime-theme-opt.active { color: var(--ime-color-primary); font-weight: 700; }
+
+.topbar-sep { color: var(--ime-color-text-muted); padding: 0 .25rem; }
+
+.topbar-user {
+  display:   flex;
+  align-items: center;
+  gap:       .4rem;
+  font-size: .85rem;
+  color:     var(--ime-color-text-muted);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.topbar-logout {
+  display:       inline-flex;
+  align-items:   center;
+  justify-content: center;
+  width:  34px; height: 34px;
+  border-radius: 6px;
+  color:         var(--ime-color-text-muted);
+  text-decoration: none;
+  transition:    background .12s, color .12s;
+}
+.topbar-logout:hover { background: var(--ime-color-surface-3); color: var(--ime-color-text); }
+.topbar-logout i { font-size: 1.1rem; }
+
+/* ── Área de contenido ───────────────────────────────────────────────────── */
+.layout-content-wrapper {
+  margin-left:  var(--sidebar-width);
+  padding-top:  var(--topbar-height);
+  flex:         1;
+  min-height:   100vh;
+  display:      flex;
+  flex-direction: column;
+  background:   var(--ime-color-surface);
+  transition:   margin-left var(--transition-speed) ease;
+}
+.layout-content {
+  padding:    1.5rem;
+  background: var(--ime-color-surface);
+  color:      var(--ime-color-text);
+  flex:       1;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.layout-footer {
+  padding:     0.75rem 1.5rem;
+  background:  var(--ime-color-surface-2);
+  border-top:  1px solid var(--ime-color-surface-3);
+  font-size:   0.75rem;
+  color:       var(--ime-color-text-muted);
+  display:     flex;
+  align-items: center;
+  gap:         0.5rem;
+}
+
+/* ── Spinner AJAX ─────────────────────────────────────────────────────────── */
+.layout-ajax-loader {
+  position:   fixed;
+  top:        0;
+  left:       0;
+  right:      0;
+  height:     3px;
+  background: var(--primary-color, #1e3a5f);
+  z-index:    9999;
+  display:    none;
+  animation:  ajax-progress 1.5s ease infinite;
+}
+@keyframes ajax-progress {
+  0%   { left: 0;   right: 100%; }
+  50%  { left: 0;   right: 0;    }
+  100% { left: 100%; right: 0;  }
+}
+
+/* ── Sidebar colapsado en desktop (toggle via JS) ────────────────────────── */
+@media (min-width: 992px) {
+  .layout-sidebar-collapsed .layout-sidebar {
+    transform: translateX(-100%);
+  }
+  .layout-sidebar-collapsed .layout-topbar {
+    left: 0;
+  }
+  .layout-sidebar-collapsed .layout-content-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────────────── */
+@media (max-width: 991px) {
+  .layout-sidebar {
+    transform: translateX(-100%);
+  }
+  .layout-sidebar.layout-sidebar-active {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0,0,0,.3);
+  }
+
+  .layout-topbar {
+    left: 0;
+  }
+
+  .layout-content-wrapper {
+    margin-left: 0;
+  }
+
+  /* Overlay cuando sidebar abierto en móvil */
+  .layout-sidebar-overlay {
+    display:    none;
+    position:   fixed;
+    top:        0;
+    left:       0;
+    right:      0;
+    bottom:     0;
+    background: rgba(0,0,0,.5);
+    z-index:    999;
+  }
+  .layout-sidebar-overlay.active {
+    display: block;
+  }
+
+}
+
+@media (max-width: 640px) {
+  .layout-content { padding: 1rem; }
+  .layout-topbar   { padding: 0 1rem; }
+}
+
+/* ── Clases utilitarias Nemit IME ────────────────────────────────────────── */
+.ime-card {
+  background:    var(--ime-color-surface-2);
+  border:        1px solid var(--ime-color-surface-3);
+  border-radius: var(--ime-radius);
+  box-shadow:    var(--ime-shadow);
+  padding:       var(--ime-card-pad);
+}
+.ime-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: var(--ime-gap); gap: 8px;
+}
+/* Tabla densa. PrimeFaces usa clases ui-* (las p-* son de otras librerías): con p-* esto nunca se aplicaba */
+.ime-table-dense.ui-datatable .ui-datatable-thead > tr > th { padding: 8px .6rem; font-size: .8rem; }
+.ime-table-dense.ui-datatable .ui-datatable-data > tr > td { padding: 8px .6rem; font-size: .9rem; }
+.nav-section {
+  display: block; padding: 12px 14px 4px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--ime-color-text-muted);
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────── */
+.page-header { margin-bottom: 1.5rem; }
+.page-header h1,
+.page-header .page-title {
+  font-size:   1.25rem;
+  font-weight: 700;
+  color:       var(--ime-color-primary);
+  margin:      0 0 0.25rem;
+}

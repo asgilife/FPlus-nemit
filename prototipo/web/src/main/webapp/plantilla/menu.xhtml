@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+  Menú lateral. Una entrada por vista del prototipo. Lo que ve cada rol se decide con rendered="#{sesionDemo.es('ROL')}"
+  (o es('A,B')), igual que el sistema real lo decidirá con sus permisos.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+
+    <ui:composition>
+        <div class="layout-sidebar">
+
+            <h:link class="sidebar-logo" outcome="/inicio">
+                <div>
+                    <img src="#{resource['app:images/nemit-logo-blanco.svg']}" alt="Nemit" class="brand-logo--white proto-logo-menu"/>
+                    <img src="#{resource['app:images/nemit-logo-color.svg']}" alt="Nemit" class="brand-logo--color proto-logo-menu"/>
+                    <span class="logo-sub proto-logo-sub">FPlus</span>
+                </div>
+            </h:link>
+
+            <ul class="layout-menu">
+                <li>
+                    <h:link outcome="/inicio">
+                        <i class="pi pi-fw pi-home"/>
+                        <span>Inicio</span>
+                    </h:link>
+                </li>
+
+                <!-- ── Historias: una entrada por vista ─────────────────────────────── -->
+                <li><span class="nav-section">Historias</span></li>
+                <ui:fragment rendered="#{sesionDemo.esDe('ERSA')}">
+                    <li>
+                        <h:link id="menuCaptura" outcome="/vistas/ensayes/captura-ersa">
+                            <i class="pi pi-fw pi-pencil"/>
+                            <span>Captura de ensayes</span>
+                        </h:link>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionDemo.esDe('Fresnillo')}">
+                    <li>
+                        <h:link id="menuRevision" outcome="/vistas/ensayes/revision-fresnillo">
+                            <i class="pi pi-fw pi-chart-bar"/>
+                            <span>Revisión de ensayes</span>
+                        </h:link>
+                    </li>
+                </ui:fragment>
+
+                <!-- ── El kit ───────────────────────────────────────────────────────── -->
+                <li><span class="nav-section">Kit</span></li>
+                <li>
+                    <h:link outcome="/vistas/ejemplo/registros">
+                        <i class="pi pi-fw pi-list"/>
+                        <span>Registros (ejemplo)</span>
+                    </h:link>
+                </li>
+                <li>
+                    <h:link outcome="/vistas/kit/componentes">
+                        <i class="pi pi-fw pi-th-large"/>
+                        <span>Catálogo de componentes</span>
+                    </h:link>
+                </li>
+            </ul>
+        </div>
+    </ui:composition>
+</html>

@@ -1,0 +1,182 @@
+/* ==========================================================================
+   nemit-tema/kit.css
+   Piezas del kit de prototipos que PrimeFaces no trae. Solo leen tokens (tokens.css): ningún color suelto.
+   Prefijo proto-. Lo que una vista necesite y no esté aquí ni en PrimeFaces se agrega aquí, con nombre genérico,
+   y se muestra en vistas/kit/componentes.xhtml.
+   ========================================================================== */
+
+/* ── Marca de prototipo y rol simulado (barra) ─────────────────────────── */
+.proto-marca {
+  margin-left: var(--ime-gap);
+  padding: 2px 10px;
+  border: 1px dashed var(--ime-color-warn);
+  border-radius: 999px;
+  color: var(--ime-color-warn);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.proto-rol { display: inline-flex; align-items: center; gap: 6px; }
+.proto-reiniciar { display: inline-flex; align-items: center; gap: 4px; color: var(--ime-color-text-muted); white-space: nowrap; }
+.proto-reiniciar:hover { color: var(--ime-color-text); }
+.proto-aviso-reinicio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--ime-gap);
+  padding: 8px 12px;
+  border-left: 4px solid var(--ime-color-ok);
+  border-radius: var(--ime-radius);
+  background: var(--ime-color-surface-2);
+  font-size: 13px;
+}
+.proto-rol__menu .ui-selectonemenu-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* La barra no se encima en pantallas angostas: el lado izquierdo cede espacio y se esconde lo prescindible */
+.layout-topbar-left { min-width: 0; overflow: hidden; }
+.layout-topbar-left .brand-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layout-topbar-right { flex: none; }
+@media (max-width: 1199px) {
+  .proto-solo-ancho { display: none; }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* Con el menú lateral a la vista, su logo basta: la barra cede ese espacio */
+  .layout-topbar-left .topbar-brand { display: none; }
+}
+@media (max-width: 991px) {
+  .layout-topbar-left .brand-text { display: none; }
+}
+@media (max-width: 640px) {
+  /* En teléfono el logo vive en el menú lateral; la barra se queda con el menú, el tema activo y el rol */
+  .layout-topbar-left .topbar-brand, .proto-marca, .ime-theme .ime-theme-opt:not(.active) { display: none; }
+  /* El lado derecho cabe junto al botón del menú: sin separadores ni icono de usuario, y el rol más angosto */
+  .layout-topbar-right .topbar-sep, .proto-rol > .pi-user { display: none; }
+}
+
+.proto-logo-menu { height: 24px; margin-bottom: 3px; }
+.proto-logo-sub { font-size: 11px; color: var(--ime-color-text-muted); }
+.proto-icono-primario { color: var(--primary-color); }
+.proto-pie-derecha { margin-left: auto; }
+
+/* ── Texto y estructura ───────────────────────────────────────────────── */
+.proto-suave { color: var(--ime-color-text-muted); }
+.proto-fuerte { font-weight: 700; }
+.proto-num { text-align: right; font-variant-numeric: tabular-nums; }
+.proto-fila { display: flex; flex-wrap: wrap; gap: var(--ime-gap); align-items: center; }
+.proto-pila { display: flex; flex-direction: column; gap: var(--ime-gap); margin-top: var(--ime-gap); }
+.proto-encabezado { display: flex; flex-wrap: wrap; gap: var(--ime-gap); align-items: flex-end; justify-content: space-between; }
+.proto-tarjeta-enlace { height: 100%; display: flex; flex-direction: column; }
+.proto-tarjeta-enlace p { flex: 1; }
+
+/* ── Indicadores ──────────────────────────────────────────────────────── */
+.proto-kpi { display: flex; flex-direction: column; gap: 2px; margin: 0; }
+.proto-kpi__valor { font-size: 2rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.proto-kpi__etiqueta { color: var(--ime-color-text-muted); font-size: 12px; }
+.proto-barra { height: 6px; margin-top: 8px; }
+.proto-cambio__antes { color: var(--ime-color-text-muted); text-decoration: line-through; }
+.proto-cambio__peor { color: var(--ime-color-danger); }
+.proto-cambio__mejor { color: var(--ime-color-ok); }
+
+/* ── Filtros, formularios y acciones ──────────────────────────────────── */
+.proto-filtros { display: flex; flex-wrap: wrap; gap: var(--ime-gap); margin-bottom: var(--ime-gap); }
+.proto-filtros .ui-inputtext { min-width: 260px; }
+.proto-formulario { display: grid; gap: var(--ime-gap) calc(var(--ime-gap) * 1.5); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.proto-campo { display: flex; flex-direction: column; gap: 4px; }
+.proto-campo .ui-inputfield, .proto-campo .ui-selectonemenu, .proto-campo .ui-inputnumber input { width: 100%; }
+/* El calendario con icono: campo y botón en un renglón */
+.proto-campo .ui-calendar { display: flex; width: 100%; }
+.proto-campo .ui-calendar input { flex: 1 1 auto; min-width: 0; width: auto; }
+.proto-campo .ui-selectonemenu { min-width: 0; }
+.proto-ancho-completo { grid-column: 1 / -1; }
+.proto-acciones { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-top: calc(var(--ime-gap) * 1.5); }
+
+/* Tablas con reflow="true" (filas apiladas en pantallas angostas): el selector «Ordenar» con el tema, no el nativo */
+.ui-datatable .ui-reflow-dropdown {
+  padding: 4px 8px;
+  border: 1px solid var(--ime-color-surface-3);
+  border-radius: 6px;
+  background: var(--ime-color-surface-2);
+  color: var(--ime-color-text);
+}
+
+/* Detalle en dos columnas: etiqueta y valor */
+.proto-campos { display: grid; grid-template-columns: max-content 1fr; gap: 8px var(--ime-gap); align-items: center; }
+.proto-campos > span:nth-child(odd) { color: var(--ime-color-text-muted); font-size: 12px; }
+
+/* ── Hitos (dentro de p:chronoline styleClass="proto-hitos") ──────────── */
+/* Sin la columna opuesta, que deja media tarjeta vacía cuando el hito no trae nada del otro lado */
+.proto-hitos .ui-chronoline-event-opposite { display: none; }
+.proto-hito { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding-bottom: 12px; }
+.proto-hito__hora { font-variant-numeric: tabular-nums; min-width: 3.2rem; }
+
+/* ── Opción elegible (p:selectOneRadio layout="custom" + p:radioButton) ── */
+.proto-opcion {
+  display: block;
+  padding: var(--ime-card-pad);
+  border: 2px solid var(--ime-color-surface-3);
+  border-radius: var(--ime-radius);
+  background: var(--ime-color-surface-2);
+  cursor: pointer;
+}
+.proto-opcion:has(.ui-radiobutton-box.ui-state-active) { border-color: var(--primary-color); }
+.proto-opcion__cabeza { display: flex; flex-wrap: wrap; align-items: center; gap: 8px var(--ime-gap); }
+.proto-opcion__cuerpo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px var(--ime-gap);
+  margin-top: var(--ime-gap);
+  padding-left: 32px;
+  font-size: 13px;
+}
+.proto-opcion__cuerpo small { display: block; color: var(--ime-color-text-muted); font-weight: 700; letter-spacing: .03em; }
+
+/* ── Señales en tablas y formularios ─────────────────────────────────── */
+/* Fila que pide atención (rowStyleClass): un renglón que alguien tiene que atender, con su porqué a la vista */
+.ui-datatable .ui-datatable-data > tr.proto-fila-atencion > td {
+  background: color-mix(in srgb, var(--ime-color-warn) 18%, transparent);
+}
+.ui-datatable .ui-datatable-data > tr.proto-fila-atencion > td:first-child { box-shadow: inset 4px 0 0 var(--ime-color-warn); }
+/* Valor fuera de su límite: rojo y en negritas, para que no dependa solo del color */
+.proto-valor-alerta { color: color-mix(in srgb, var(--ime-color-danger) 75%, var(--ime-color-text)); font-weight: 700; }
+/* Tabla ancha (styleClass="proto-tabla-ancha" junto con reflow="true"): las columnas toman el ancho de su contenido y,
+   por debajo de 1200 px, cada fila se apila como el reflow de PrimeFaces (que solo lo hace por debajo de 640 px) */
+.proto-tabla-ancha.ui-datatable table { table-layout: auto; }
+@media (max-width: 1199px) {
+  .proto-tabla-ancha.ui-datatable-reflow thead th { display: none; }
+  .proto-tabla-ancha.ui-datatable-reflow .ui-datatable-data td[role=gridcell]:not(.ui-helper-hidden) {
+    box-sizing: border-box; display: block; float: left; clear: left; width: 100% !important;
+    border: 0 none; text-align: left !important;
+  }
+  .proto-tabla-ancha.ui-datatable-reflow .ui-datatable-data td[role=gridcell] .ui-column-title {
+    display: inline-block; font-weight: 700; min-width: 30%; max-width: 35%; margin: -.4em 1em -.4em -.4em; padding: .4em;
+  }
+  .proto-tabla-ancha.ui-datatable-reflow .ui-datatable-data td[role=gridcell] > div { display: inline-block; vertical-align: top; }
+}
+/* Varias etiquetas en una celda: una debajo de otra si no caben, nunca partidas */
+.proto-etiquetas { display: flex; flex-wrap: wrap; gap: 4px; align-items: flex-start; }
+/* Nota pequeña bajo un campo o un valor (quién lo capturó, de dónde viene) */
+.proto-nota { font-size: 12px; color: var(--ime-color-text-muted); }
+
+/* ── Solo para prototipos: preguntas abiertas a la vista ─────────────── */
+.proto-pregunta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  padding: 8px 12px;
+  border: 1px dashed var(--ime-color-text-muted);
+  border-radius: var(--ime-radius);
+  font-size: 13px;
+}
+.proto-pregunta::before {
+  content: "Pregunta";
+  flex: none;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--ime-color-text-muted);
+  color: var(--ime-color-surface);
+  font-size: 11px;
+  font-weight: 700;
+}
+[data-preguntas="ocultas"] .proto-pregunta { display: none; }

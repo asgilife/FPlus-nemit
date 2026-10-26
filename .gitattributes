@@ -1,0 +1,22 @@
+# Fin de línea fijado por el repositorio, no por la máquina (Arquitectura de Referencia Nemit, AR-G-21).
+# Con core.autocrlf=true, revertir un archivo lo reescribe con CRLF y lo desplegado deja de ser lo del repositorio.
+* text=auto eol=lf
+
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.eot  binary
+*.jar  binary
+*.war  binary
+*.pdf  binary
+*.xlsx binary
+*.docx binary

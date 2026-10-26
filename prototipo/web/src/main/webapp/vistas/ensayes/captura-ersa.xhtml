@@ -1,0 +1,292 @@
+<!--
+  Captura de ensayes de ERSA.
+  Historias: HU-001 (encontrar los lotes), HU-002 (capturar), HU-003 (revisar y autorizar) y la parte de ERSA de HU-007
+  (confirmar o corregir un lote que Fresnillo regresó).
+  Requisitos: RF-001, RF-004 a RF-007, RF-014, RF-020, RF-036 a RF-050, RF-054, RF-055; RNF-006, RNF-008, RNF-009.
+  Supuestos (2026-10-21):
+   - Los elementos, su orden y sus unidades salen de un extracto simulado; la lista real por producto es P-018.
+   - Leer el código del sobre abre el lote y propone la fecha de recepción de hoy (P-022, C-005).
+   - La fecha estimada la escribe ERSA a mano (P-048).
+   - Cualquier capturista confirma o corrige un lote devuelto, y la corrección vuelve a pasar por revisión y
+     autorización (P-026).
+   - Los tres niveles son personas de ERSA (P-021).
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/plantilla/plantilla.xhtml">
+
+    <ui:define name="title">Captura de ensayes</ui:define>
+
+    <ui:define name="content">
+        <div class="page-header proto-encabezado">
+            <div>
+                <h1>Captura de ensayes</h1>
+                <p class="proto-suave">Los ensayes de la muestra oficial, por lote, con su revisión y autorización en ERSA.</p>
+            </div>
+        </div>
+
+        <!-- Lector de código de barras: su propio formulario para que el Enter del lector abra el lote -->
+        <h:form id="lectorForm" rendered="#{sesionDemo.esDe('ERSA')}">
+            <div class="ime-card">
+                <div class="proto-filtros">
+                    <p:inputText id="codigo" value="#{capturaEnsayesView.codigo}" placeholder="Código del sobre o lote Met-Mex"
+                                 aria-label="Código del sobre"/>
+                    <p:commandButton id="abrirCodigo" value="Abrir lote" icon="pi pi-qrcode"
+                                     actionListener="#{capturaEnsayesView.leerCodigo}"
+                                     process="@form" update="@form :dlgLoteForm :form:mensajes"/>
+                    <p:defaultCommand target="abrirCodigo"/>
+                </div>
+                <p:messages id="erroresLector" closable="false" severity="error"/>
+                <p class="proto-nota">Con el lector, el código del sobre abre el lote sin buscarlo. Prueba con LF20260970 o P20260974.</p>
+                <div class="proto-pregunta">¿Qué código del sobre se lee: el del lote fundición o el de la clave de remitente? ¿ERSA tiene lectores? (P-022)</div>
+            </div>
+        </h:form>
+
+        <h:form id="form">
+            <p:growl id="mensajes" showDetail="false" life="4000" severity="info"/>
+
+            <ui:fragment rendered="#{not sesionDemo.esDe('ERSA')}">
+                <p:staticMessage severity="warn" summary="Sin acceso"
+                                 detail="Esta tarea es de ERSA. Con el rol «#{sesionDemo.rol}» no se ven los lotes ni los ensayes."/>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{sesionDemo.esDe('ERSA')}">
+                <div class="ime-card">
+                    <div class="proto-filtros">
+                        <p:selectOneMenu id="compania" value="#{capturaEnsayesView.filtro.compania}" filter="true"
+                                         filterMatchMode="contains" aria-label="Compañía">
+                            <f:selectItem itemLabel="Todas las compañías" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{capturaEnsayesView.companias}"/>
+                            <p:ajax listener="#{capturaEnsayesView.filtrar}" update="unidad tabla"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="unidad" value="#{capturaEnsayesView.filtro.unidad}" filter="true"
+                                         filterMatchMode="contains" aria-label="Unidad">
+                            <f:selectItem itemLabel="Todas las unidades" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{capturaEnsayesView.unidades}"/>
+                            <p:ajax listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="producto" value="#{capturaEnsayesView.filtro.producto}" aria-label="Producto">
+                            <f:selectItem itemLabel="Todos los productos" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{capturaEnsayesView.productos}"/>
+                            <p:ajax listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:selectOneMenu>
+                        <p:selectOneMenu id="tipoBusqueda" value="#{capturaEnsayesView.filtro.tipoBusqueda}" aria-label="Buscar por">
+                            <f:selectItems value="#{capturaEnsayesView.tiposBusqueda}" var="t" itemLabel="#{t.texto}" itemValue="#{t}"/>
+                            <p:ajax listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:selectOneMenu>
+                        <p:datePicker id="desde" value="#{capturaEnsayesView.filtro.desde}" pattern="dd/MM/yyyy"
+                                      placeholder="Desde" showIcon="true" aria-label="Desde">
+                            <p:ajax event="dateSelect" listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:datePicker>
+                        <p:datePicker id="hasta" value="#{capturaEnsayesView.filtro.hasta}" pattern="dd/MM/yyyy"
+                                      placeholder="Hasta" showIcon="true" aria-label="Hasta">
+                            <p:ajax event="dateSelect" listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:datePicker>
+                        <p:commandButton id="limpiar" value="Limpiar" icon="pi pi-filter-slash" styleClass="ui-button-outlined"
+                                         actionListener="#{capturaEnsayesView.limpiarFiltros}" process="@this" update="@form"/>
+                    </div>
+                    <div class="proto-fila">
+                        <p:selectOneButton id="alcance" value="#{capturaEnsayesView.todos}">
+                            <f:selectItem itemLabel="#{capturaEnsayesView.titulo}" itemValue="#{false}"/>
+                            <f:selectItem itemLabel="Todo lo reportado" itemValue="#{true}"/>
+                            <p:ajax listener="#{capturaEnsayesView.filtrar}" update="tabla"/>
+                        </p:selectOneButton>
+                    </div>
+                </div>
+
+                <div class="ime-card">
+                    <p:dataTable id="tabla" value="#{capturaEnsayesView.lotes}" var="l" rowKey="#{l.clave}"
+                                 selectionMode="single" selection="#{capturaEnsayesView.lote}"
+                                 rowStyleClass="#{l.devuelto or not empty l.observacionErsa ? 'proto-fila-atencion' : null}"
+                                 paginator="true" rows="10" paginatorPosition="bottom"
+                                 emptyMessage="No hay lotes para estos filtros." styleClass="ime-table-dense proto-tabla-ancha" reflow="true">
+                        <p:ajax event="rowSelect" update=":dlgLoteForm" oncomplete="PF('dlgLote').show()"/>
+                        <p:column headerText="Lote" sortBy="#{l.loteMetMex}">
+                            <div class="proto-fuerte">#{l.loteMetMex}</div>
+                            <div class="proto-nota">lote #{l.loteUnidad}</div>
+                        </p:column>
+                        <p:column headerText="Unidad y producto" sortBy="#{l.unidad}">
+                            <div>#{l.unidad}</div>
+                            <div class="proto-nota">#{l.producto}</div>
+                        </p:column>
+                        <p:column headerText="Cierre" sortBy="#{l.fechaCierre}">
+                            <h:outputText value="#{l.fechaCierre}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/></h:outputText>
+                        </p:column>
+                        <p:column headerText="Peso seco (t)" styleClass="proto-num">
+                            <h:outputText value="#{l.pesoSeco}"><f:convertNumber minFractionDigits="3" maxFractionDigits="3"/></h:outputText>
+                        </p:column>
+                        <p:column headerText="Muestra">#{l.tipoMuestra.texto}</p:column>
+                        <p:column headerText="Capturados" styleClass="proto-num">#{l.ensayes.size()} de #{capturaEnsayesView.total(l)}</p:column>
+                        <p:column headerText="Estado">
+                            <div class="proto-etiquetas">
+                                <p:tag value="#{l.estado.texto}" severity="#{l.estado.severidad}"/>
+                                <p:tag value="Regresado por Fresnillo" severity="danger" rendered="#{l.devuelto}"/>
+                                <p:tag value="Regresado en ERSA" severity="warning" rendered="#{not empty l.observacionErsa and not l.devuelto}"/>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </ui:fragment>
+        </h:form>
+
+        <!-- El lote: datos de PROVEM, la muestra, los ensayes y las acciones que tocan al rol -->
+        <p:dialog id="dlgLote" widgetVar="dlgLote" header="Lote" modal="true" responsive="true" width="860"
+                  closeOnEscape="true" fitViewport="true">
+            <h:form id="dlgLoteForm">
+                <ui:fragment rendered="#{capturaEnsayesView.lote != null}">
+                    <ui:param name="l" value="#{capturaEnsayesView.lote}"/>
+                    <p:messages id="errores" closable="false" severity="error,warn"/>
+
+                    <div class="proto-encabezado">
+                        <h2>#{l.loteMetMex} · lote #{l.loteUnidad}</h2>
+                        <p:tag value="#{l.estado.texto}" severity="#{l.estado.severidad}"/>
+                    </div>
+
+                    <p:staticMessage severity="warn" rendered="#{l.devuelto}" summary="Regresado por Fresnillo"
+                                     detail="#{l.observacionFresnillo}"/>
+                    <p:staticMessage severity="info" rendered="#{not empty l.observacionErsa and not l.devuelto}"
+                                     summary="Regresado en ERSA" detail="#{l.observacionErsa}"/>
+
+                    <div class="proto-campos">
+                        <span>Compañía</span><span>#{l.compania}</span>
+                        <span>Unidad</span><span>#{l.unidad}</span>
+                        <span>Producto</span><span>#{l.producto}</span>
+                        <span>Fecha de cierre</span>
+                        <span><h:outputText value="#{l.fechaCierre}"><f:convertDateTime type="localDate" pattern="dd/MM/yyyy"/></h:outputText></span>
+                        <span>Peso seco</span>
+                        <span><h:outputText value="#{l.pesoSeco}"><f:convertNumber minFractionDigits="3" maxFractionDigits="3"/></h:outputText> t</span>
+                    </div>
+                    <p class="proto-nota">Estos datos vienen de PROVEM: ERSA ya no los captura.</p>
+
+                    <h3>Muestra</h3>
+                    <div class="proto-formulario">
+                        <div class="proto-campo">
+                            <p:outputLabel for="tipoMuestra" value="Tipo de muestra"/>
+                            <p:selectOneMenu id="tipoMuestra" value="#{capturaEnsayesView.tipoMuestra}"
+                                             disabled="#{not capturaEnsayesView.editable}">
+                                <f:selectItems value="#{capturaEnsayesView.tiposMuestra}" var="t" itemLabel="#{t.texto}" itemValue="#{t}"/>
+                            </p:selectOneMenu>
+                        </div>
+                        <div class="proto-campo">
+                            <p:outputLabel for="entregaMetMex" value="Entrega de Met-Mex al representante"/>
+                            <p:datePicker id="entregaMetMex" value="#{capturaEnsayesView.entregaMetMex}" pattern="dd/MM/yyyy"
+                                          showIcon="true" disabled="#{l.entregaPorInterfaz or not capturaEnsayesView.editable}"/>
+                            <h:outputText styleClass="proto-nota" rendered="#{l.entregaPorInterfaz}" value="Llegó por la interfaz de Met-Mex."/>
+                        </div>
+                        <div class="proto-campo">
+                            <p:outputLabel for="recepcion" value="Recepción en el laboratorio"/>
+                            <p:datePicker id="recepcion" value="#{capturaEnsayesView.recepcion}" pattern="dd/MM/yyyy"
+                                          showIcon="true" disabled="#{not capturaEnsayesView.editable}"/>
+                        </div>
+                        <div class="proto-campo">
+                            <p:outputLabel for="estimada" value="Entrega estimada de resultados"/>
+                            <p:datePicker id="estimada" value="#{capturaEnsayesView.estimada}" pattern="dd/MM/yyyy"
+                                          showIcon="true" disabled="#{not capturaEnsayesView.editable}"/>
+                        </div>
+                    </div>
+                    <div class="proto-pila">
+                        <ui:fragment rendered="#{not l.entregaPorInterfaz}">
+                            <div class="proto-pregunta">¿Met-Mex compartirá por interfaz la fecha en que entrega los sobres? Si no, ERSA la escribe, como en este lote. (P-007)</div>
+                        </ui:fragment>
+                        <div class="proto-pregunta">La fecha estimada, ¿la escribe ERSA o se calcula sumando a la recepción los días acordados? (P-048)</div>
+                    </div>
+
+                    <h3>Ensayes</h3>
+                    <p class="proto-suave">#{capturaEnsayesView.capturados} de #{capturaEnsayesView.elementos.size()} elementos capturados. Se envía a revisión cuando están todos.</p>
+                    <div class="proto-formulario">
+                        <ui:repeat value="#{capturaEnsayesView.elementos}" var="e">
+                            <div class="proto-campo">
+                                <p:outputLabel for="valor" value="#{e.etiqueta} (#{e.unidad})"/>
+                                <p:inputNumber id="valor" value="#{capturaEnsayesView.valores[e.clave]}"
+                                               decimalPlaces="#{e.decimales}" thousandSeparator="" minValue="0"
+                                               disabled="#{not capturaEnsayesView.valoresEditables}"/>
+                                <h:outputText styleClass="proto-nota"
+                                              value="#{capturaEnsayesView.captura(e.clave) == null ? 'Sin capturar' : 'Capturó '.concat(capturaEnsayesView.captura(e.clave).usuario)}"/>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                    <div class="proto-pila">
+                        <div class="proto-pregunta">ERSA reporta oro y plata normales y ajustados: ¿cuál se usa en el intercambio, y eso cambia por cliente o producto? (P-023)</div>
+                    </div>
+
+                    <ui:fragment rendered="#{capturaEnsayesView.puedeRevisar or capturaEnsayesView.puedeAutorizar}">
+                        <div class="proto-campo proto-ancho-completo">
+                            <p:outputLabel for="obsErsa" value="Observación para regresar (opcional)"/>
+                            <p:inputTextarea id="obsErsa" value="#{capturaEnsayesView.observacion}" rows="2" autoResize="false"
+                                             maxlength="1000"/>
+                        </div>
+                        <div class="proto-pregunta">¿Quiénes ocupan cada nivel: captura, revisión y autorización? ¿Todos son de ERSA? (P-021)</div>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{capturaEnsayesView.puedeAtenderDevolucion}">
+                        <div class="proto-pregunta">¿Quién de ERSA confirma o corrige un lote regresado? ¿La corrección vuelve a pasar por revisión y autorización? (P-026)</div>
+                    </ui:fragment>
+
+                    <div class="proto-acciones">
+                        <p:commandButton id="guardar" value="Guardar" icon="pi pi-save" styleClass="ui-button-outlined"
+                                         rendered="#{capturaEnsayesView.editable}"
+                                         actionListener="#{capturaEnsayesView.guardar}"
+                                         process="@form" update="@form :form:tabla :form:mensajes"/>
+                        <p:commandButton id="enviar" value="Enviar a revisión" icon="pi pi-send"
+                                         rendered="#{capturaEnsayesView.editable}"
+                                         actionListener="#{capturaEnsayesView.enviar}"
+                                         process="@form" update="@form :form:tabla :form:mensajes"/>
+
+                        <p:commandButton id="confirmar" value="Confirmar sin cambios" icon="pi pi-check"
+                                         rendered="#{capturaEnsayesView.puedeAtenderDevolucion and not capturaEnsayesView.corrigiendo}"
+                                         actionListener="#{capturaEnsayesView.confirmar}"
+                                         process="@this" update="@form :form:tabla :form:mensajes :correosForm">
+                            <p:confirm header="¿Confirmar los valores?" icon="pi pi-exclamation-triangle"
+                                       message="Lo que confirmas tiene validez oficial: Fresnillo recibe el aviso y el lote se bloquea."/>
+                        </p:commandButton>
+                        <p:commandButton id="corregir" value="Corregir valores" icon="pi pi-pencil" styleClass="ui-button-outlined"
+                                         rendered="#{capturaEnsayesView.puedeAtenderDevolucion and not capturaEnsayesView.corrigiendo}"
+                                         actionListener="#{capturaEnsayesView.corregir}" process="@this" update="@form"/>
+                        <p:commandButton id="actualizar" value="Actualizar y enviar" icon="pi pi-send"
+                                         rendered="#{capturaEnsayesView.puedeAtenderDevolucion and capturaEnsayesView.corrigiendo}"
+                                         actionListener="#{capturaEnsayesView.actualizarYEnviar}"
+                                         process="@form" update="@form :form:tabla :form:mensajes"/>
+
+                        <p:commandButton id="revisado" value="Marcar revisado" icon="pi pi-check"
+                                         rendered="#{capturaEnsayesView.puedeRevisar}"
+                                         actionListener="#{capturaEnsayesView.marcarRevisado}"
+                                         process="@this" update="@form :form:tabla :form:mensajes"/>
+                        <p:commandButton id="autorizar" value="Autorizar" icon="pi pi-verified"
+                                         rendered="#{capturaEnsayesView.puedeAutorizar}"
+                                         actionListener="#{capturaEnsayesView.autorizar}"
+                                         process="@this" update="@form :form:tabla :form:mensajes"/>
+                        <p:commandButton id="regresar" value="Regresar a captura" icon="pi pi-replay" styleClass="ui-button-outlined"
+                                         rendered="#{capturaEnsayesView.puedeRevisar or capturaEnsayesView.puedeAutorizar}"
+                                         actionListener="#{capturaEnsayesView.regresar}"
+                                         process="@form" update="@form :form:tabla :form:mensajes"/>
+
+                        <p:commandButton value="Cerrar" type="button" styleClass="ui-button-outlined" onclick="PF('dlgLote').hide()"/>
+                    </div>
+
+                    <p:fieldset legend="Historia del lote" toggleable="true" collapsed="true">
+                        <ui:repeat value="#{l.historia}" var="h">
+                            <div class="proto-hito">
+                                <h:outputText styleClass="proto-hito__hora proto-nota" value="#{h.cuando}">
+                                    <f:convertDateTime type="localDateTime" pattern="dd/MM HH:mm"/>
+                                </h:outputText>
+                                <span>#{h.que}</span>
+                                <span class="proto-nota">#{h.quien}</span>
+                            </div>
+                        </ui:repeat>
+                    </p:fieldset>
+                </ui:fragment>
+            </h:form>
+        </p:dialog>
+
+        <h:form id="confirmacionForm">
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="440">
+                <p:commandButton value="Volver" type="button" styleClass="ui-confirmdialog-no ui-button-outlined"/>
+                <p:commandButton value="Sí, confirmar" type="button" styleClass="ui-confirmdialog-yes"/>
+            </p:confirmDialog>
+        </h:form>
+
+        <ui:include src="/plantilla/correos-demo.xhtml"/>
+    </ui:define>
+</ui:composition>
